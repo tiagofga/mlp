@@ -1,4 +1,9 @@
-mlp
-===
+== How to use the code ==
 
-MLP in C++
+== About ==
+
+== Preparations ==
+
+== Warning Notes ==
+
+== The source code ==

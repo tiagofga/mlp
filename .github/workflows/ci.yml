@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-and-test:
+    name: Build+Test (OpenMP=${{ matrix.openmp }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        openmp: [OFF, ON]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DMLP_ENABLE_OPENMP=${{ matrix.openmp }}
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  cuda-optional:
+    name: CUDA Build (optional)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect CUDA Toolkit
+        id: detect_cuda
+        shell: bash
+        run: |
+          if command -v nvcc >/dev/null 2>&1; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+            nvcc --version
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Configure (CUDA)
+        if: steps.detect_cuda.outputs.available == 'true'
+        run: cmake -S . -B build-cuda -DCMAKE_BUILD_TYPE=Release -DMLP_ENABLE_CUDA=ON
+
+      - name: Build (CUDA)
+        if: steps.detect_cuda.outputs.available == 'true'
+        run: cmake --build build-cuda --config Release --parallel
+
+      - name: Smoke check (CUDA build)
+        if: steps.detect_cuda.outputs.available == 'true'
+        run: ./build-cuda/mlp --help
+
+      - name: Skip message (no CUDA)
+        if: steps.detect_cuda.outputs.available != 'true'
+        run: echo "CUDA toolkit not available on this runner; CUDA job skipped."

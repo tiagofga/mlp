@@ -11,3 +11,12 @@
 *.lai
 *.la
 *.a
+
+# Build outputs
+build/
+build-*/
+/mlp
+
+# Example checkpoints
+model_checkpoint.txt
+test_model_checkpoint.txt

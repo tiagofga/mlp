@@ -15,7 +15,7 @@
 # Build outputs
 build/
 build-*/
-mlp
+/mlp
 
 # Example checkpoints
 model_checkpoint.txt

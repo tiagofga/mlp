@@ -1,8 +1,15 @@
 # Modular MLP in C++
 
-Academic-oriented, from-scratch multilayer perceptron (MLP) project with both:
-- a CLI app for experiments, and
-- an installable CMake library package for reuse in other projects.
+[![CI](https://github.com/tiagofga/mlp/actions/workflows/ci.yml/badge.svg)](https://github.com/tiagofga/mlp/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/tiagofga/mlp)](https://github.com/tiagofga/mlp/releases) [![License](https://img.shields.io/github/license/tiagofga/mlp)](./LICENSE) [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://isocpp.org/) [![OpenMP Optional](https://img.shields.io/badge/OpenMP-optional-00599C.svg)](https://www.openmp.org/) [![CUDA Optional](https://img.shields.io/badge/CUDA-optional-76B900.svg)](https://developer.nvidia.com/cuda-toolkit) [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/tiagofga/mlp/pulls) [![Issues Welcome](https://img.shields.io/badge/issues-welcome-brightgreen.svg)](https://github.com/tiagofga/mlp/issues)
+
+An academic-focused, from-scratch multilayer perceptron (MLP) project in modern C++ with both:
+- a CLI application for experiments, and
+- an installable CMake library package for reuse in other C++ projects.
+
+Current scope:
+- `C++17`
+- CPU execution, optional `OpenMP`, optional `CUDA`
+- CLI experiments and installable CMake library package
 
 ## Quick Start (CLI)
 
@@ -18,7 +25,11 @@ cmake --build build
 ./build/mlp
 ```
 
-Main runtime options:
+The CLI trains on a train split and reports loss and binary metrics on train, validation, and test.
+
+## Main Options
+
+Common CLI options:
 
 ```bash
 ./build/mlp --optimizer sgd|momentum|adam|adamw
@@ -27,8 +38,6 @@ Main runtime options:
 ./build/mlp --samples 1000 --seed 42
 ./build/mlp --train-ratio 0.7 --val-ratio 0.15 --threshold 0.5
 ```
-
-The CLI trains on train split and reports loss/metrics on train, validation, and test.
 
 ## Backend Options
 
@@ -48,7 +57,11 @@ cmake --build build-cuda
 ./build-cuda/mlp
 ```
 
-If CUDA is not detected, set `CUDAToolkit_ROOT`.
+CUDA notes:
+- CUDA support is optional and currently accelerates dense-layer matrix operations.
+- The current CUDA path is intended for correctness and experimentation, not peak throughput.
+- If CUDA is not detected, configure CMake with `-DCUDAToolkit_ROOT=/path/to/cuda`.
+- If `nvcc` is unavailable, use the default CPU build or the OpenMP build.
 
 ## Library Usage
 
@@ -111,31 +124,6 @@ If using custom install prefix:
 cmake -S . -B build -DCMAKE_PREFIX_PATH=/tmp/mlp-install
 ```
 
-## Testing and CI
-
-Run all tests locally:
-
-```bash
-cmake -S . -B build
-cmake --build build
-ctest --test-dir build --output-on-failure
-```
-
-Test suite includes:
-- training/evaluation integration test
-- save/load roundtrip test
-- installed package consumer test (`find_package(mlp)`)
-
-CI (`.github/workflows/ci.yml`) runs:
-- OpenMP matrix (`MLP_ENABLE_OPENMP=OFF/ON`)
-- optional CUDA configure/build smoke check when `nvcc` is available
-
-Pre-push local check:
-
-```bash
-./scripts/pre_push_check.sh
-```
-
 ## Documentation
 
 - `docs/TUTORIAL.md`
@@ -149,3 +137,38 @@ Pre-push local check:
 - `Adam`
 - `AdamW`
 - `LambdaOptimizer` (custom extension hook)
+
+## Testing and CI
+
+Run all tests locally:
+
+```bash
+cmake -S . -B build
+cmake --build build
+ctest --test-dir build --output-on-failure
+```
+
+Pre-push local check:
+
+```bash
+./scripts/pre_push_check.sh
+```
+
+Test suite includes:
+- training/evaluation integration test
+- save/load roundtrip test
+- installed package consumer test (`find_package(mlp)`)
+
+CI (`.github/workflows/ci.yml`) runs:
+- OpenMP matrix (`MLP_ENABLE_OPENMP=OFF/ON`)
+- optional CUDA configure/build smoke check when `nvcc` is available
+
+CI verification:
+- use the `CI` badge at the top of this README
+- use `./scripts/pre_push_check.sh` before pushing changes
+
+## Scope
+
+- Language: C++17
+- Primary use case: academic experiments and library-oriented reuse
+- Supported acceleration paths: CPU, OpenMP, and optional CUDA

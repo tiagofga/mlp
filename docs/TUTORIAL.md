@@ -246,14 +246,9 @@ Use `--threshold` to control classification cutoff for binary metrics.
   - Validate layer input/output sizes.
   - Validate dataset dimensions.
 
-## 9. Suggested Contribution Roadmap
+## 9. Contribution Roadmap
 
-- Mini-batch training
-- Validation/test split
-- More metrics and logging
-- `Adam` and momentum optimizers
-- Regularization (`L2`, dropout)
-- Config-driven experiments (JSON/YAML)
+The full phased roadmap with links to GitHub issues is in [`ROADMAP.md`](../ROADMAP.md) at the repository root.
 
 ## 10. Recommended Workflow for Changes
 

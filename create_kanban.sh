@@ -4,7 +4,7 @@
 # Usage:
 #   ./create_kanban.sh [OWNER]
 #
-# OWNER defaults to the authenticated user (@me). Pass an organisation name when
+# OWNER defaults to the authenticated user (@me). Pass an organization name when
 # the project should live under an org, e.g.: ./create_kanban.sh tiagofga
 #
 # Requirements:
@@ -45,7 +45,7 @@ PROJECT_URL=$(gh project create \
     --owner "$OWNER" \
     --title "MLP Roadmap" \
     --format json | \
-    python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('url',''))")
+    python3 -c "import sys, json; d=json.load(sys.stdin); print(d.get('url',''))")
 
 # Extract the numeric ID from the URL (last path segment)
 PROJECT_NUMBER="${PROJECT_URL##*/}"
@@ -81,7 +81,7 @@ add_issue "$PROJECT_NUMBER" \
 ## Acceptance criteria
 1. Linking against OpenBLAS or Apple Accelerate is optional and detected at CMake configure time.
 2. CPU-backend results are numerically equivalent to the current implementation within 1 e-5 tolerance.
-3. A microbenchmark (forward + backward on a 512×512 weight matrix) shows ≥ 2× speedup on a machine with BLAS available."
+3. A microbenchmark (forward + backward on a 512x512 weight matrix) shows >= 2x speedup on a machine with BLAS available."
 
 add_issue "$PROJECT_NUMBER" \
     "opt: Vectorise activation functions with SIMD intrinsics" \
@@ -157,7 +157,7 @@ add_issue "$PROJECT_NUMBER" \
     "Add a CMake target (\`docs\`) that runs Doxygen over the public headers and outputs HTML to \`build/docs/html\`.  Add a CI step that uploads the output as a workflow artifact.
 
 ## Acceptance criteria
-1. \`cmake --build build --target docs\` succeeds when Doxygen ≥ 1.9 is installed.
+1. \`cmake --build build --target docs\` succeeds when Doxygen >= 1.9 is installed.
 2. All public API symbols in \`include/mlp/\` have non-empty \`@brief\` entries.
 3. CI uploads the artifact on every push to \`main\`."
 

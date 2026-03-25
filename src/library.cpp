@@ -26,9 +26,14 @@ std::unique_ptr<Optimizer> build_optimizer(const std::string &name, double learn
   const bool has_custom_lr = learning_rate > 0.0;
   if (name == "sgd") return std::make_unique<SGD>(has_custom_lr ? learning_rate : 0.8);
   if (name == "momentum") return std::make_unique<Momentum>(has_custom_lr ? learning_rate : 0.2, 0.9);
+  if (name == "nag") return std::make_unique<NAG>(has_custom_lr ? learning_rate : 1.0, 0.9);
   if (name == "adam") return std::make_unique<Adam>(has_custom_lr ? learning_rate : 0.05);
   if (name == "adamw") return std::make_unique<AdamW>(has_custom_lr ? learning_rate : 0.05, 1e-2);
+  if (name == "nadam") return std::make_unique<Nadam>(has_custom_lr ? learning_rate : 0.05);
   if (name == "rmsprop") return std::make_unique<RMSProp>(has_custom_lr ? learning_rate : 1e-2);
+  if (name == "adagrad") return std::make_unique<AdaGrad>(has_custom_lr ? learning_rate : 0.1);
+  if (name == "adadelta") return std::make_unique<AdaDelta>();
+  if (name == "lion") return std::make_unique<Lion>(has_custom_lr ? learning_rate : 3e-3);
   throw std::invalid_argument("Unknown optimizer: " + name);
 }
 

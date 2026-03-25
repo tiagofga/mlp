@@ -81,6 +81,65 @@ class RMSProp : public Optimizer {
   std::unordered_map<const void *, Vector> cache_v_;
 };
 
+class NAG : public Optimizer {
+ public:
+  NAG(double learning_rate, double beta = 0.9) : learning_rate_(learning_rate), beta_(beta) {}
+  void step(Sequential &model) override;
+
+ private:
+  double learning_rate_;
+  double beta_;
+  std::unordered_map<const void *, Matrix> velocity_m_;
+  std::unordered_map<const void *, Vector> velocity_v_;
+};
+
+class AdaGrad : public Optimizer {
+ public:
+  AdaGrad(double learning_rate = 0.1, double epsilon = 1e-8) : learning_rate_(learning_rate), epsilon_(epsilon) {}
+  void step(Sequential &model) override;
+
+ private:
+  double learning_rate_;
+  double epsilon_;
+  std::unordered_map<const void *, Matrix> cache_m_;
+  std::unordered_map<const void *, Vector> cache_v_;
+};
+
+class Nadam : public Adam {
+ public:
+  Nadam(double learning_rate = 1e-3, double beta1 = 0.9, double beta2 = 0.999, double epsilon = 1e-8)
+      : Adam(learning_rate, beta1, beta2, epsilon) {}
+  void step(Sequential &model) override;
+};
+
+class AdaDelta : public Optimizer {
+ public:
+  AdaDelta(double rho = 0.95, double epsilon = 1e-6) : rho_(rho), epsilon_(epsilon) {}
+  void step(Sequential &model) override;
+
+ private:
+  double rho_;
+  double epsilon_;
+  std::unordered_map<const void *, Matrix> eg2_m_;
+  std::unordered_map<const void *, Matrix> edx2_m_;
+  std::unordered_map<const void *, Vector> eg2_v_;
+  std::unordered_map<const void *, Vector> edx2_v_;
+};
+
+class Lion : public Optimizer {
+ public:
+  Lion(double learning_rate = 3e-3, double beta1 = 0.9, double beta2 = 0.99)
+      : learning_rate_(learning_rate), beta1_(beta1), beta2_(beta2) {}
+  void step(Sequential &model) override;
+
+ private:
+  double learning_rate_;
+  double beta1_;
+  double beta2_;
+  std::unordered_map<const void *, Matrix> momentum_m_;
+  std::unordered_map<const void *, Vector> momentum_v_;
+};
+
 class LambdaOptimizer : public Optimizer {
  public:
   using MatrixRule = std::function<void(Matrix &, const Matrix &, std::size_t)>;

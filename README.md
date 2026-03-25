@@ -32,7 +32,7 @@ The CLI trains on a train split and reports loss and binary metrics on train, va
 Common CLI options:
 
 ```bash
-./build/mlp --optimizer sgd|momentum|adam|adamw
+./build/mlp --optimizer sgd|momentum|nag|adam|adamw|nadam|rmsprop|adagrad|adadelta|lion
 ./build/mlp --hidden 16,16,8
 ./build/mlp --epochs 3000 --lr 0.01
 ./build/mlp --samples 1000 --seed 42
@@ -132,11 +132,19 @@ cmake -S . -B build -DCMAKE_PREFIX_PATH=/tmp/mlp-install
 
 ## Optimizers Included
 
-- `SGD`
-- `Momentum`
-- `Adam`
-- `AdamW`
-- `LambdaOptimizer` (custom extension hook)
+| Name | CLI string | Notes |
+|---|---|---|
+| SGD | `sgd` | Vanilla stochastic gradient descent |
+| Momentum | `momentum` | SGD with exponential moving-average velocity |
+| NAG | `nag` | Nesterov Accelerated Gradient |
+| Adam | `adam` | Adaptive moment estimation |
+| AdamW | `adamw` | Adam + decoupled weight decay |
+| Nadam | `nadam` | Adam with Nesterov momentum correction |
+| RMSProp | `rmsprop` | Root mean square propagation |
+| AdaGrad | `adagrad` | Adaptive per-parameter learning rates (accumulative) |
+| AdaDelta | `adadelta` | AdaGrad variant with running averages, no fixed lr |
+| Lion | `lion` | Evolved Sign Momentum — sign-based, memory-efficient |
+| LambdaOptimizer | — | Custom extension hook via user-supplied lambdas |
 
 ## Testing and CI
 

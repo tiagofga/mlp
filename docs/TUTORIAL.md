@@ -24,8 +24,14 @@ Select optimizer at runtime:
 ```bash
 ./build/mlp --optimizer sgd
 ./build/mlp --optimizer momentum
+./build/mlp --optimizer nag
 ./build/mlp --optimizer adam
 ./build/mlp --optimizer adamw
+./build/mlp --optimizer nadam
+./build/mlp --optimizer rmsprop
+./build/mlp --optimizer adagrad
+./build/mlp --optimizer adadelta
+./build/mlp --optimizer lion
 ```
 
 Select hidden-layer layout at runtime:
@@ -168,19 +174,33 @@ To use your own dataset, replace the generator in `main.cpp` and keep:
 
 ### Available optimizers right now
 
-- `SGD`
-- `Momentum`
-- `Adam`
-- `AdamW`
-- `LambdaOptimizer` for custom update rules
+| Name | CLI string | Notes |
+|---|---|---|
+| SGD | `sgd` | Vanilla stochastic gradient descent |
+| Momentum | `momentum` | SGD with exponential moving-average velocity |
+| NAG | `nag` | Nesterov Accelerated Gradient |
+| Adam | `adam` | Adaptive moment estimation |
+| AdamW | `adamw` | Adam + decoupled weight decay |
+| Nadam | `nadam` | Adam with Nesterov momentum correction |
+| RMSProp | `rmsprop` | Root mean square propagation |
+| AdaGrad | `adagrad` | Adaptive per-parameter learning rates (accumulative) |
+| AdaDelta | `adadelta` | AdaGrad variant with running averages, no fixed lr |
+| Lion | `lion` | Evolved Sign Momentum — sign-based, memory-efficient |
+| LambdaOptimizer | — | Custom extension hook via user-supplied lambdas |
 
 Runtime selection:
 
 ```bash
 ./build/mlp --optimizer sgd
 ./build/mlp --optimizer momentum
+./build/mlp --optimizer nag
 ./build/mlp --optimizer adam
 ./build/mlp --optimizer adamw
+./build/mlp --optimizer nadam
+./build/mlp --optimizer rmsprop
+./build/mlp --optimizer adagrad
+./build/mlp --optimizer adadelta
+./build/mlp --optimizer lion
 ```
 
 ### Custom optimizer without editing core code

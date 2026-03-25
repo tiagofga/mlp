@@ -9,7 +9,7 @@ namespace {
 
 void print_usage(const char *program) {
   std::cout << "Usage: " << program
-            << " [--optimizer sgd|momentum|adam|adamw|rmsprop]"
+            << " [--optimizer sgd|momentum|nag|adam|adamw|nadam|rmsprop|adagrad|adadelta|lion]"
             << " [--hidden 16,16,8]"
             << " [--epochs N]"
             << " [--lr VALUE]"

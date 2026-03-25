@@ -126,6 +126,7 @@ cmake -S . -B build -DCMAKE_PREFIX_PATH=/tmp/mlp-install
 
 ## Documentation
 
+- `ROADMAP.md` — phased feature roadmap linked to GitHub issues
 - `docs/TUTORIAL.md`
 - `docs/EXPERIMENTS.md`
 - `docs/API_POLICY.md`

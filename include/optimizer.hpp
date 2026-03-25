@@ -67,6 +67,20 @@ class AdamW : public Adam {
   bool decay_bias_;
 };
 
+class RMSProp : public Optimizer {
+ public:
+  RMSProp(double learning_rate = 1e-2, double rho = 0.9, double epsilon = 1e-8)
+      : learning_rate_(learning_rate), rho_(rho), epsilon_(epsilon) {}
+  void step(Sequential &model) override;
+
+ private:
+  double learning_rate_;
+  double rho_;
+  double epsilon_;
+  std::unordered_map<const void *, Matrix> cache_m_;
+  std::unordered_map<const void *, Vector> cache_v_;
+};
+
 class LambdaOptimizer : public Optimizer {
  public:
   using MatrixRule = std::function<void(Matrix &, const Matrix &, std::size_t)>;

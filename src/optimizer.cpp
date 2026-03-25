@@ -128,8 +128,7 @@ void Adam::step(Sequential &model) {
   }
 }
 
-void AdamW::step(Sequential &model) {
-  ++step_count_;
+void AdamW::step(Sequential &model) {  ++step_count_;
   const double bias_c1 = 1.0 - std::pow(beta1_, static_cast<double>(step_count_));
   const double bias_c2 = 1.0 - std::pow(beta2_, static_cast<double>(step_count_));
 
@@ -173,6 +172,37 @@ void AdamW::step(Sequential &model) {
         const double m_hat = m[i] / bias_c1;
         const double v_hat = v[i] / bias_c2;
         (*param.value)[i] -= learning_rate_ * m_hat / (std::sqrt(v_hat) + epsilon_);
+      }
+    }
+  }
+}
+
+void RMSProp::step(Sequential &model) {
+  ++step_count_;
+  for (auto &layer : model.layers()) {
+    for (auto &param : layer->matrix_params()) {
+      const void *key = static_cast<const void *>(param.value);
+      auto &cache = cache_m_[key];
+      if (cache.empty()) cache = zeros_like(*param.value);
+
+      for (std::size_t i = 0; i < rows(*param.value); ++i) {
+        for (std::size_t j = 0; j < cols(*param.value); ++j) {
+          const double g = (*param.grad)[i][j];
+          cache[i][j] = rho_ * cache[i][j] + (1.0 - rho_) * g * g;
+          (*param.value)[i][j] -= learning_rate_ * g / (std::sqrt(cache[i][j]) + epsilon_);
+        }
+      }
+    }
+
+    for (auto &param : layer->vector_params()) {
+      const void *key = static_cast<const void *>(param.value);
+      auto &cache = cache_v_[key];
+      if (cache.empty()) cache = Vector(param.value->size(), 0.0);
+
+      for (std::size_t i = 0; i < param.value->size(); ++i) {
+        const double g = (*param.grad)[i];
+        cache[i] = rho_ * cache[i] + (1.0 - rho_) * g * g;
+        (*param.value)[i] -= learning_rate_ * g / (std::sqrt(cache[i]) + epsilon_);
       }
     }
   }

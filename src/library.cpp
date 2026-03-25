@@ -28,6 +28,7 @@ std::unique_ptr<Optimizer> build_optimizer(const std::string &name, double learn
   if (name == "momentum") return std::make_unique<Momentum>(has_custom_lr ? learning_rate : 0.2, 0.9);
   if (name == "adam") return std::make_unique<Adam>(has_custom_lr ? learning_rate : 0.05);
   if (name == "adamw") return std::make_unique<AdamW>(has_custom_lr ? learning_rate : 0.05, 1e-2);
+  if (name == "rmsprop") return std::make_unique<RMSProp>(has_custom_lr ? learning_rate : 1e-2);
   throw std::invalid_argument("Unknown optimizer: " + name);
 }
 

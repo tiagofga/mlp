@@ -181,3 +181,7 @@ CI verification:
 - Language: C++17
 - Primary use case: academic experiments and library-oriented reuse
 - Supported acceleration paths: CPU, OpenMP, and optional CUDA
+
+## License
+
+Released under the MIT License. The project is provided as-is, without warranty. GitHub issues are welcome.

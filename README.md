@@ -1,6 +1,6 @@
 # Modular MLP in C++
 
-[![CI](https://github.com/tiagofga/mlp/actions/workflows/ci.yml/badge.svg)](https://github.com/tiagofga/mlp/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/tiagofga/mlp)](https://github.com/tiagofga/mlp/releases) [![License](https://img.shields.io/github/license/tiagofga/mlp)](./LICENSE) [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://isocpp.org/) [![OpenMP Optional](https://img.shields.io/badge/OpenMP-optional-00599C.svg)](https://www.openmp.org/) [![CUDA Optional](https://img.shields.io/badge/CUDA-optional-76B900.svg)](https://developer.nvidia.com/cuda-toolkit) [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/tiagofga/mlp/pulls) [![Issues Welcome](https://img.shields.io/badge/issues-welcome-brightgreen.svg)](https://github.com/tiagofga/mlp/issues)
+[![CI](https://github.com/tiagofga/mlp/actions/workflows/ci.yml/badge.svg)](https://github.com/tiagofga/mlp/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/tiagofga/mlp)](https://github.com/tiagofga/mlp/releases) [![License](https://img.shields.io/github/license/tiagofga/mlp)](./LICENSE) [![C++17](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://isocpp.org/) [![OpenMP Optional](https://img.shields.io/badge/OpenMP-optional-00599C.svg)](https://www.openmp.org/) [![CUDA Optional](https://img.shields.io/badge/CUDA-optional-76B900.svg)](https://developer.nvidia.com/cuda-toolkit) [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](https://github.com/tiagofga/mlp/pulls)
 
 An academic-focused, from-scratch multilayer perceptron (MLP) project in modern C++ with both:
 - a CLI application for experiments, and
@@ -181,3 +181,7 @@ CI verification:
 - Language: C++17
 - Primary use case: academic experiments and library-oriented reuse
 - Supported acceleration paths: CPU, OpenMP, and optional CUDA
+
+## License
+
+Released under the MIT License. The project is provided as-is, without warranty or support obligations.

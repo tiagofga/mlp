@@ -3,6 +3,7 @@ project(modular_mlp VERSION 0.2.0 LANGUAGES CXX)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
+include(CheckCXXSourceCompiles)
 include(CTest)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -10,6 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 option(MLP_ENABLE_CUDA "Enable CUDA backend for dense linear algebra" OFF)
 option(MLP_ENABLE_OPENMP "Enable OpenMP for CPU parallelism" OFF)
+option(MLP_ENABLE_BLAS "Enable BLAS backend for dense CPU matrix multiplies" OFF)
 
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/generated/include/mlp")
 configure_file(
@@ -30,8 +32,14 @@ add_executable(mlp_io_example
 add_executable(mlp_test_experiment
   tests/test_experiment.cpp
 )
+add_executable(mlp_test_dense
+  tests/test_dense.cpp
+)
 add_executable(mlp_test_io_roundtrip
   tests/test_io_roundtrip.cpp
+)
+add_executable(mlp_dense_benchmark
+  benchmarks/dense_blas_benchmark.cpp
 )
 
 add_library(mlp_core
@@ -103,7 +111,9 @@ target_link_libraries(mlp PRIVATE mlp_lib)
 target_link_libraries(mlp_library_example PRIVATE mlp_lib)
 target_link_libraries(mlp_io_example PRIVATE mlp_lib)
 target_link_libraries(mlp_test_experiment PRIVATE mlp::mlp_train)
+target_link_libraries(mlp_test_dense PRIVATE mlp::mlp_core)
 target_link_libraries(mlp_test_io_roundtrip PRIVATE mlp::mlp_io)
+target_link_libraries(mlp_dense_benchmark PRIVATE mlp::mlp_core)
 
 target_compile_options(mlp PRIVATE -Wall -Wextra -Wpedantic)
 target_compile_options(mlp_core PRIVATE -Wall -Wextra -Wpedantic)
@@ -113,10 +123,13 @@ target_compile_options(mlp_io PRIVATE -Wall -Wextra -Wpedantic)
 target_compile_options(mlp_library_example PRIVATE -Wall -Wextra -Wpedantic)
 target_compile_options(mlp_io_example PRIVATE -Wall -Wextra -Wpedantic)
 target_compile_options(mlp_test_experiment PRIVATE -Wall -Wextra -Wpedantic)
+target_compile_options(mlp_test_dense PRIVATE -Wall -Wextra -Wpedantic)
 target_compile_options(mlp_test_io_roundtrip PRIVATE -Wall -Wextra -Wpedantic)
+target_compile_options(mlp_dense_benchmark PRIVATE -Wall -Wextra -Wpedantic)
 
 if(BUILD_TESTING)
   add_test(NAME mlp_test_experiment COMMAND mlp_test_experiment)
+  add_test(NAME mlp_test_dense COMMAND mlp_test_dense)
   add_test(NAME mlp_test_io_roundtrip COMMAND mlp_test_io_roundtrip)
   set_tests_properties(mlp_test_io_roundtrip PROPERTIES WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
@@ -136,6 +149,60 @@ if(MLP_ENABLE_OPENMP)
   endif()
   target_link_libraries(mlp_core PUBLIC OpenMP::OpenMP_CXX)
 endif()
+
+set(MLP_BLAS_BACKEND "disabled")
+
+if(MLP_ENABLE_BLAS)
+  if(APPLE)
+    find_library(MLP_ACCELERATE_FRAMEWORK Accelerate)
+    if(MLP_ACCELERATE_FRAMEWORK)
+      target_link_libraries(mlp_core PUBLIC "${MLP_ACCELERATE_FRAMEWORK}")
+      target_compile_definitions(mlp_core PUBLIC MLP_USE_BLAS MLP_USE_ACCELERATE)
+      set(MLP_BLAS_BACKEND "Accelerate")
+    else()
+      message(WARNING "MLP_ENABLE_BLAS=ON but Apple Accelerate was not found; continuing without BLAS.")
+    endif()
+  else()
+    find_package(BLAS QUIET)
+    if(BLAS_FOUND)
+      if(TARGET BLAS::BLAS)
+        set(CMAKE_REQUIRED_LIBRARIES BLAS::BLAS)
+      else()
+        set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
+      endif()
+      set(MLP_CBLAS_TEST_SOURCE [[
+        #include <cblas.h>
+        int main() {
+          double a = 0.0;
+          double b = 0.0;
+          double c = 0.0;
+          cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 1, 1, 1,
+                      1.0, &a, 1, &b, 1, 0.0, &c, 1);
+          return 0;
+        }
+      ]])
+      check_cxx_source_compiles("${MLP_CBLAS_TEST_SOURCE}" MLP_HAVE_CBLAS)
+      unset(CMAKE_REQUIRED_LIBRARIES)
+      unset(MLP_CBLAS_TEST_SOURCE)
+
+      if(MLP_HAVE_CBLAS)
+        if(TARGET BLAS::BLAS)
+          target_link_libraries(mlp_core PUBLIC BLAS::BLAS)
+        else()
+          target_link_libraries(mlp_core PUBLIC ${BLAS_LIBRARIES})
+        endif()
+        target_compile_definitions(mlp_core PUBLIC MLP_USE_BLAS)
+        set(MLP_BLAS_BACKEND "CBLAS")
+      else()
+        message(WARNING "MLP_ENABLE_BLAS=ON but <cblas.h> was not usable; continuing without BLAS.")
+      endif()
+    else()
+      message(WARNING "MLP_ENABLE_BLAS=ON but no BLAS library was found; continuing without BLAS.")
+    endif()
+  endif()
+endif()
+
+message(STATUS "MLP BLAS backend: ${MLP_BLAS_BACKEND}")
 
 if(MLP_ENABLE_CUDA)
   find_package(CUDAToolkit QUIET)

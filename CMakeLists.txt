@@ -170,7 +170,7 @@ if(MLP_ENABLE_BLAS)
       else()
         set(CMAKE_REQUIRED_LIBRARIES ${BLAS_LIBRARIES})
       endif()
-      check_cxx_source_compiles("
+      set(MLP_CBLAS_TEST_SOURCE [[
         #include <cblas.h>
         int main() {
           double a = 0.0;
@@ -180,8 +180,10 @@ if(MLP_ENABLE_BLAS)
                       1.0, &a, 1, &b, 1, 0.0, &c, 1);
           return 0;
         }
-      " MLP_HAVE_CBLAS)
+      ]])
+      check_cxx_source_compiles("${MLP_CBLAS_TEST_SOURCE}" MLP_HAVE_CBLAS)
       unset(CMAKE_REQUIRED_LIBRARIES)
+      unset(MLP_CBLAS_TEST_SOURCE)
 
       if(MLP_HAVE_CBLAS)
         if(TARGET BLAS::BLAS)

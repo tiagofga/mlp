@@ -75,7 +75,8 @@ int main() {
   constexpr std::size_t kBatchSize = 512;
   constexpr std::size_t kInFeatures = 512;
   constexpr std::size_t kOutFeatures = 512;
-  constexpr int kIterations = 5;
+  constexpr int kWarmupIterations = 3;
+  constexpr int kIterations = 20;
   constexpr double kTolerance = 1e-5;
 
   std::mt19937 rng(123);
@@ -120,6 +121,8 @@ int main() {
     return 1;
   }
 
+  static_cast<void>(run_dense_path(dense, input, grad_output, kWarmupIterations));
+  static_cast<void>(run_naive_path(weights, bias, input, grad_output, kWarmupIterations));
   const TimedResult dense_result = run_dense_path(dense, input, grad_output, kIterations);
   const TimedResult naive_result =
       run_naive_path(weights, bias, input, grad_output, kIterations);
@@ -130,6 +133,7 @@ int main() {
 #else
   std::cout << "mode=fallback\n";
 #endif
+  std::cout << "warmup_iterations=" << kWarmupIterations << "\n";
   std::cout << "iterations=" << kIterations << "\n";
   std::cout << "dense_seconds=" << dense_result.seconds << "\n";
   std::cout << "naive_seconds=" << naive_result.seconds << "\n";

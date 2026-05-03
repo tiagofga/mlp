@@ -1,5 +1,6 @@
 #include "dense.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <stdexcept>
 #include <vector>
@@ -27,10 +28,9 @@ enum class GemmTranspose {
 
 #ifdef MLP_USE_BLAS
 std::vector<double> flatten_row_major(const Matrix &matrix) {
-  std::vector<double> flat;
-  flat.reserve(rows(matrix) * cols(matrix));
-  for (const auto &row : matrix) {
-    flat.insert(flat.end(), row.begin(), row.end());
+  std::vector<double> flat(rows(matrix) * cols(matrix));
+  for (std::size_t i = 0; i < rows(matrix); ++i) {
+    std::copy(matrix[i].begin(), matrix[i].end(), flat.begin() + i * cols(matrix));
   }
   return flat;
 }

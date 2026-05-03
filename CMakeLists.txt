@@ -173,8 +173,11 @@ if(MLP_ENABLE_BLAS)
       check_cxx_source_compiles("
         #include <cblas.h>
         int main() {
-          cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 0, 0, 0,
-                      1.0, nullptr, 1, nullptr, 1, 0.0, nullptr, 1);
+          double a = 0.0;
+          double b = 0.0;
+          double c = 0.0;
+          cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 1, 1, 1,
+                      1.0, &a, 1, &b, 1, 0.0, &c, 1);
           return 0;
         }
       " MLP_HAVE_CBLAS)

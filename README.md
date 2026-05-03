@@ -49,6 +49,14 @@ cmake --build build-omp
 ./build-omp/mlp
 ```
 
+BLAS / CBLAS (CPU GEMM acceleration):
+
+```bash
+cmake -S . -B build-blas -DMLP_ENABLE_BLAS=ON
+cmake --build build-blas
+./build-blas/mlp_dense_benchmark
+```
+
 CUDA (dense ops):
 
 ```bash
@@ -62,6 +70,11 @@ CUDA notes:
 - The current CUDA path is intended for correctness and experimentation, not peak throughput.
 - If CUDA is not detected, configure CMake with `-DCUDAToolkit_ROOT=/path/to/cuda`.
 - If `nvcc` is unavailable, use the default CPU build or the OpenMP build.
+
+BLAS notes:
+- `MLP_ENABLE_BLAS=ON` enables configure-time detection of Apple Accelerate on macOS or a CBLAS-compatible BLAS library such as OpenBLAS on Linux.
+- If a compatible BLAS backend is not found, CMake emits a warning and the CPU path keeps using the existing fallback implementation.
+- `mlp_dense_benchmark` compares Dense forward/backward against the naive CPU path on a `512x512` workload and reports the observed speedup.
 
 ## Library Usage
 

@@ -6,6 +6,10 @@ if(@MLP_ENABLE_OPENMP@)
   find_dependency(OpenMP)
 endif()
 
+if("@MLP_BLAS_BACKEND@" STREQUAL "CBLAS")
+  find_dependency(BLAS)
+endif()
+
 if(@MLP_ENABLE_CUDA@)
   find_dependency(CUDAToolkit)
 endif()

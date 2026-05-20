@@ -194,6 +194,7 @@ Test suite includes:
 
 CI (`.github/workflows/ci.yml`) runs:
 - OpenMP matrix (`MLP_ENABLE_OPENMP=OFF/ON`)
+- Valgrind memcheck on Ubuntu (`ctest -T memcheck` with `valgrind --leak-check=full`, failing on definite leaks)
 - BLAS configure/build/test/benchmark job with OpenBLAS on Ubuntu
 - optional CUDA configure/build smoke check when `nvcc` is available
 

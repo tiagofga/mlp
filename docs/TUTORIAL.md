@@ -204,5 +204,6 @@ For install commands and `find_package` usage, see [Install and find_package](..
 ## 13. Automated Tests and CI
 
 For test commands and CI configuration details, see [Testing and CI](../README.md#testing-and-ci) in the README.
+CI now also includes an Ubuntu Valgrind memcheck job that runs the test suite with full leak checks and fails on definite leaks.
 That includes the BLAS benchmark gate whenever a BLAS backend is detected/enabled.
 The local test suite also includes `mlp_test_activations` for ReLU, Sigmoid, and Tanh forward/backward checks, `mlp_test_loss` for BinaryCrossEntropy forward/backward, clamp, and shape-mismatch coverage, and `mlp_test_gradient_check` for reusable finite-difference checks on Dense and Tanh layers.

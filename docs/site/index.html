@@ -62,7 +62,7 @@ cmake --build build-blas
               <ul class="info-list">
                 <li>Academic experimentation</li>
                 <li>Reproducible training runs</li>
-                <li>Activation and loss unit coverage</li>
+                <li>Activation, loss, and gradient-check coverage</li>
                 <li>Library reuse in larger CMake projects</li>
               </ul>
             </div>
@@ -80,8 +80,8 @@ cmake --build build-blas
               <p>
                 Run XOR-style experiments with configurable hidden layers,
                 optimizers, dataset splits, metrics, activation layers, and
-                loss functions (BinaryCrossEntropy) covered by dedicated unit
-                tests.
+                loss functions (BinaryCrossEntropy) backed by dedicated unit
+                tests and finite-difference gradient checks.
               </p>
             </article>
             <article class="feature-card panel">
@@ -121,7 +121,7 @@ cmake --build build-blas
             <article class="workflow-step">
               <span class="step-number">03</span>
               <h3>Validate changes</h3>
-              <p>Use the pre-push script to rebuild and rerun the repository test suite before sharing updates.</p>
+              <p>Use the pre-push script to rebuild and rerun the repository test suite, including gradient-check coverage, before sharing updates.</p>
             </article>
           </div>
         </section>

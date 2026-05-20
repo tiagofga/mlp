@@ -125,6 +125,7 @@ pre { margin: 0; padding: 1rem; overflow-x: auto; border-radius: 16px; backgroun
 .visual-card figcaption { margin-top:.65rem; color:var(--muted); font-weight:600; }
 
 .contribute-section p { color: var(--muted); max-width: 52rem; }
+.privacy-section p { color: var(--muted); max-width: 52rem; }
 
 @media (max-width: 960px) {
   .hero,.feature-grid,.workflow-grid,.resource-grid,.visual-grid { grid-template-columns: 1fr; }

@@ -13,6 +13,14 @@ option(MLP_ENABLE_CUDA "Enable CUDA backend for dense linear algebra" OFF)
 option(MLP_ENABLE_OPENMP "Enable OpenMP for CPU parallelism" OFF)
 option(MLP_ENABLE_BLAS "Enable BLAS backend for dense CPU matrix multiplies" OFF)
 
+# Report debugger availability during configure so local and CI environments expose debug tooling.
+find_program(MLP_GDB_EXECUTABLE NAMES gdb DOC "Path to the GNU debugger")
+if(MLP_GDB_EXECUTABLE)
+  set(MLP_GDB_AVAILABLE ON)
+else()
+  set(MLP_GDB_AVAILABLE OFF)
+endif()
+
 file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/generated/include/mlp")
 configure_file(
   cmake/version.hpp.in
@@ -221,6 +229,10 @@ if(MLP_ENABLE_BLAS)
 endif()
 
 message(STATUS "MLP BLAS backend: ${MLP_BLAS_BACKEND}")
+message(STATUS "MLP GDB available (configure diagnostic): ${MLP_GDB_AVAILABLE}")
+if(MLP_GDB_AVAILABLE)
+  message(STATUS "MLP GDB executable: ${MLP_GDB_EXECUTABLE}")
+endif()
 
 if(BUILD_TESTING AND NOT MLP_BLAS_BACKEND STREQUAL "disabled")
   add_test(

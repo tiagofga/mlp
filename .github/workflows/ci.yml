@@ -29,6 +29,35 @@ jobs:
       - name: Test
         run: ctest --test-dir build --output-on-failure
 
+  memcheck:
+    name: Valgrind Memcheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Valgrind
+        run: sudo apt-get update && sudo apt-get install -y valgrind gdb
+
+      - name: Configure (Memcheck)
+        run: |
+          VALGRIND="$(command -v valgrind)"
+          if [ -z "${VALGRIND}" ]; then
+            echo "valgrind was not found after installation" >&2
+            exit 1
+          fi
+          VALGRIND_OPTIONS="--leak-check=full --show-leak-kinds=definite --errors-for-leak-kinds=definite --error-exitcode=1 --track-origins=yes"
+          cmake -S . -B build-memcheck -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+            -DMEMORYCHECK_COMMAND="${VALGRIND}" \
+            -DMEMORYCHECK_COMMAND_OPTIONS="${VALGRIND_OPTIONS}"
+
+      - name: Build (Memcheck)
+        run: cmake --build build-memcheck --config RelWithDebInfo --parallel
+
+      - name: Test (Memcheck)
+        run: ctest --test-dir build-memcheck -T memcheck --output-on-failure
+
   blas-benchmark:
     name: BLAS Benchmark
     runs-on: ubuntu-latest

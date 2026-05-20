@@ -42,8 +42,9 @@ jobs:
 
       - name: Configure (Memcheck)
         run: |
+          VALGRIND="$(command -v valgrind)"
           cmake -S . -B build-memcheck -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-            -DMEMORYCHECK_COMMAND="$(command -v valgrind)" \
+            -DMEMORYCHECK_COMMAND="${VALGRIND}" \
             -DMEMORYCHECK_COMMAND_OPTIONS="--leak-check=full --show-leak-kinds=definite --errors-for-leak-kinds=definite --error-exitcode=1 --track-origins=yes"
 
       - name: Build (Memcheck)

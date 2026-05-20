@@ -11,7 +11,7 @@ Progress is tracked via [GitHub Issues](https://github.com/tiagofga/mlp/issues).
 Establish a solid test baseline before adding new features.
 
 - [x] Add unit tests for all activation functions — [#31](https://github.com/tiagofga/mlp/issues/31) *(ReLU, Sigmoid, and Tanh forward/backward coverage added in `mlp_test_activations`)*
-- [ ] Add unit tests for all loss functions — [#32](https://github.com/tiagofga/mlp/issues/32)
+- [x] Add unit tests for all loss functions — [#32](https://github.com/tiagofga/mlp/issues/32) *(BinaryCrossEntropy forward/backward, clamp, and shape-mismatch coverage added in `mlp_test_loss`)*
 - [ ] Add gradient-check (numerical Jacobian) tests — [#33](https://github.com/tiagofga/mlp/issues/33)
 - [ ] Add memory-leak detection step to CI — [#34](https://github.com/tiagofga/mlp/issues/34)
 

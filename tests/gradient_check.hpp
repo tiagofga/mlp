@@ -27,11 +27,15 @@ inline double contract(const mlp::Matrix &lhs, const mlp::Matrix &rhs) {
   return total;
 }
 
+// Reduce the layer output to a scalar by contracting it with grad_output so
+// central differences can approximate the corresponding Jacobian-vector product.
 inline double objective(mlp::Layer &layer, const mlp::Matrix &input, const mlp::Matrix &grad_output,
                         double scale = 1.0) {
   return scale * contract(layer.forward(input), grad_output);
 }
 
+// Clamp the denominator away from zero so near-zero gradients do not produce
+// unstable relative-error spikes during finite-difference comparisons.
 inline double relative_error(double analytical, double numerical) {
   return std::fabs(analytical - numerical) /
          std::max({1.0, std::fabs(analytical), std::fabs(numerical)});

@@ -1,5 +1,6 @@
 #include <chrono>
 #include <cmath>
+#include <exception>
 #include <iostream>
 #include <random>
 #include <string>
@@ -88,11 +89,18 @@ int main(int argc, char **argv) {
         std::cerr << "--min-speedup requires a value\n";
         return 1;
       }
-      min_speedup = std::stod(argv[++i]);
+      const std::string value = argv[++i];
+      try {
+        min_speedup = std::stod(value);
+      } catch (const std::exception &) {
+        std::cerr << "invalid value for --min-speedup: " << value << "\n";
+        return 1;
+      }
       continue;
     }
     if (arg == "--help") {
-      std::cout << "Usage: mlp_dense_benchmark [--min-speedup value]\n";
+      std::cout << "Usage: mlp_dense_benchmark [--min-speedup value]\n"
+                << "  --min-speedup value  Enforce a minimum BLAS speedup threshold.\n";
       return 0;
     }
     std::cerr << "unknown argument: " << arg << "\n";

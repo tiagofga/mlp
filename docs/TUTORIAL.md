@@ -98,7 +98,8 @@ To use your own dataset, replace the generator in `main.cpp` and keep:
 
 1. Declare class in `include/activations.hpp` inheriting `Layer`.
 2. Implement `forward` and `backward` in `src/activations.cpp`.
-3. Use the new activation in `src/main.cpp`.
+3. Add or extend focused coverage in `tests/test_activations.cpp`.
+4. Use the new activation in `src/main.cpp`.
 
 ## 6.2 Add a new loss
 
@@ -203,3 +204,4 @@ For install commands and `find_package` usage, see [Install and find_package](..
 
 For test commands and CI configuration details, see [Testing and CI](../README.md#testing-and-ci) in the README.
 That includes the BLAS benchmark gate whenever a BLAS backend is detected/enabled.
+The local test suite also includes `mlp_test_activations` for ReLU, Sigmoid, and Tanh forward/backward checks.

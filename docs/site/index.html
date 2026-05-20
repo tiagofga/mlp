@@ -52,12 +52,17 @@ cmake --build build
 ./build/mlp
 
 ./scripts/pre_push_check.sh</code></pre>
+              <p class="terminal-title terminal-title-secondary">BLAS benchmark</p>
+              <pre><code>cmake -S . -B build-blas -DMLP_ENABLE_BLAS=ON
+cmake --build build-blas
+./build-blas/mlp_dense_benchmark --min-speedup 2.0</code></pre>
             </div>
             <div class="info-card">
               <p class="info-label">Built for</p>
               <ul class="info-list">
                 <li>Academic experimentation</li>
                 <li>Reproducible training runs</li>
+                <li>Activation-layer unit coverage</li>
                 <li>Library reuse in larger CMake projects</li>
               </ul>
             </div>
@@ -74,14 +79,16 @@ cmake --build build
               <h3>Training and evaluation</h3>
               <p>
                 Run XOR-style experiments with configurable hidden layers,
-                optimizers, dataset splits, and metrics.
+                optimizers, dataset splits, metrics, and activation layers
+                covered by dedicated ReLU, Sigmoid, and Tanh unit tests.
               </p>
             </article>
             <article class="feature-card panel">
               <h3>Acceleration paths</h3>
               <p>
                 Start on CPU, enable OpenMP for parallelism, or switch on BLAS and
-                CUDA when you want faster dense operations.
+                CUDA when you want faster dense operations, including the 512x512
+                BLAS benchmark gate used in CI validation.
               </p>
             </article>
             <article class="feature-card panel">
@@ -143,6 +150,11 @@ cmake --build build
               <span class="resource-tag">Planning</span>
               <h3>Roadmap</h3>
               <p>Follow the phased feature plan tied to project milestones and issues.</p>
+            </a>
+            <a class="resource-card panel" href="https://github.com/tiagofga/mlp/blob/master/docs/API_POLICY.md">
+              <span class="resource-tag">Compatibility</span>
+              <h3>API Policy</h3>
+              <p>Review the compatibility expectations for public headers and exported targets.</p>
             </a>
           </div>
         </section>

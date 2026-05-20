@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,10 +12,17 @@
   </head>
   <body>
     <div class="page-shell">
+      <header class="topbar panel">
+        <p class="eyebrow">tiagofga/mlp</p>
+        <button class="theme-toggle" type="button" aria-label="Toggle theme" aria-pressed="false">
+          <span class="theme-icon" aria-hidden="true">🌙</span>
+          <span class="theme-label">Dark mode</span>
+        </button>
+      </header>
+
       <main class="container">
         <section class="hero panel">
           <div class="hero-copy">
-            <p class="eyebrow">tiagofga/mlp</p>
             <h1>Modern C++ for reproducible MLP experiments</h1>
             <p class="hero-text">
               Build, benchmark, and reuse a from-scratch multilayer perceptron with
@@ -126,6 +133,56 @@ cmake --build build-blas
           </div>
         </section>
 
+
+        <section class="section-block visual-section panel">
+          <div class="section-heading">
+            <p class="section-kicker">Visual themes</p>
+            <h2>Light and dark previews</h2>
+            <p>Yes — the site can host additional custom images. These preview tiles are SVG-based and easy to replace.</p>
+          </div>
+          <div class="visual-grid">
+            <figure class="visual-card">
+              <svg viewBox="0 0 480 260" role="img" aria-label="Light theme preview" xmlns="http://www.w3.org/2000/svg">
+                <defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#dbeafe"/><stop offset="100%" stop-color="#eff6ff"/></linearGradient></defs>
+                <rect width="480" height="260" rx="22" fill="url(#lg1)"/>
+                <rect x="32" y="32" width="416" height="42" rx="12" fill="#ffffff"/>
+                <rect x="32" y="92" width="268" height="138" rx="16" fill="#ffffff"/>
+                <rect x="314" y="92" width="134" height="64" rx="16" fill="#bfdbfe"/>
+                <rect x="314" y="166" width="134" height="64" rx="16" fill="#dbeafe"/>
+              </svg>
+              <figcaption>Light mode composition</figcaption>
+            </figure>
+            <figure class="visual-card">
+              <svg viewBox="0 0 480 260" role="img" aria-label="Dark theme preview" xmlns="http://www.w3.org/2000/svg">
+                <defs><linearGradient id="dg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#111827"/></linearGradient></defs>
+                <rect width="480" height="260" rx="22" fill="url(#dg1)"/>
+                <rect x="32" y="32" width="416" height="42" rx="12" fill="#1e293b"/>
+                <rect x="32" y="92" width="268" height="138" rx="16" fill="#1e293b"/>
+                <rect x="314" y="92" width="134" height="64" rx="16" fill="#1d4ed8"/>
+                <rect x="314" y="166" width="134" height="64" rx="16" fill="#334155"/>
+              </svg>
+              <figcaption>Dark mode composition</figcaption>
+            </figure>
+          </div>
+        </section>
+
+
+        <section class="section-block panel contribute-section">
+          <div class="section-heading">
+            <p class="section-kicker">Contribute</p>
+            <h2>Help build the project with us</h2>
+            <p>
+              If this repository helped your research or learning, consider contributing:
+              report bugs, improve docs, add tests, or propose optimizations.
+              Every issue, discussion, and pull request makes the project stronger.
+            </p>
+          </div>
+          <div class="actions">
+            <a class="btn btn-primary" href="https://github.com/tiagofga/mlp/issues">Open an issue</a>
+            <a class="btn" href="https://github.com/tiagofga/mlp/pulls">Submit a pull request</a>
+          </div>
+        </section>
+
         <section class="section-block">
           <div class="section-heading">
             <p class="section-kicker">Docs and references</p>
@@ -161,5 +218,37 @@ cmake --build build-blas
         </section>
       </main>
     </div>
+
+    <script>
+      const root = document.documentElement;
+      const toggle = document.querySelector('.theme-toggle');
+      const label = toggle?.querySelector('.theme-label');
+      const icon = toggle?.querySelector('.theme-icon');
+      const storedTheme = window.localStorage.getItem('theme');
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialTheme = storedTheme || (systemDark ? 'dark' : 'light');
+
+      const applyTheme = (theme) => {
+        root.setAttribute('data-theme', theme);
+        const dark = theme === 'dark';
+        if (toggle) {
+          toggle.setAttribute('aria-pressed', String(dark));
+        }
+        if (label) {
+          label.textContent = dark ? 'Light mode' : 'Dark mode';
+        }
+        if (icon) {
+          icon.textContent = dark ? '☀️' : '🌙';
+        }
+      };
+
+      applyTheme(initialTheme);
+
+      toggle?.addEventListener('click', () => {
+        const nextTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        window.localStorage.setItem('theme', nextTheme);
+        applyTheme(nextTheme);
+      });
+    </script>
   </body>
 </html>

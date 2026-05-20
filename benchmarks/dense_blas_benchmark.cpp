@@ -3,6 +3,7 @@
 #include <exception>
 #include <iostream>
 #include <random>
+#include <stdexcept>
 #include <string>
 
 #include "dense.hpp"
@@ -89,11 +90,17 @@ int main(int argc, char **argv) {
         std::cerr << "--min-speedup requires a value\n";
         return 1;
       }
-      const std::string value = argv[++i];
+      const std::string value = argv[i + 1];
+      ++i;
       try {
         min_speedup = std::stod(value);
-      } catch (const std::exception &) {
-        std::cerr << "invalid value for --min-speedup: " << value << "\n";
+      } catch (const std::invalid_argument &error) {
+        std::cerr << "invalid numeric value for --min-speedup: " << value
+                  << " (" << error.what() << ")\n";
+        return 1;
+      } catch (const std::out_of_range &error) {
+        std::cerr << "out-of-range value for --min-speedup: " << value
+                  << " (" << error.what() << ")\n";
         return 1;
       }
       continue;

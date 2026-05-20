@@ -144,6 +144,12 @@ cmake -S . -B build -DCMAKE_PREFIX_PATH=/tmp/mlp-install
 - [`docs/EXPERIMENTS.md`](./docs/EXPERIMENTS.md) — experiment log template for academic tracking
 - [`docs/API_POLICY.md`](./docs/API_POLICY.md) — API compatibility policy and versioning
 
+## Project Website (GitHub Pages)
+
+- URL: `https://tiagofga.github.io/mlp/`
+- Source files: [`docs/site`](./docs/site)
+- Deployment workflow: [`.github/workflows/pages.yml`](./.github/workflows/pages.yml)
+
 ## Optimizers Included
 
 | Name | CLI string | Notes |

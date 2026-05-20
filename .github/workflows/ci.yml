@@ -43,9 +43,14 @@ jobs:
       - name: Configure (Memcheck)
         run: |
           VALGRIND="$(command -v valgrind)"
+          if [ -z "${VALGRIND}" ]; then
+            echo "valgrind was not found after installation" >&2
+            exit 1
+          fi
+          VALGRIND_OPTIONS="--leak-check=full --show-leak-kinds=definite --errors-for-leak-kinds=definite --error-exitcode=1 --track-origins=yes"
           cmake -S . -B build-memcheck -DCMAKE_BUILD_TYPE=RelWithDebInfo \
             -DMEMORYCHECK_COMMAND="${VALGRIND}" \
-            -DMEMORYCHECK_COMMAND_OPTIONS="--leak-check=full --show-leak-kinds=definite --errors-for-leak-kinds=definite --error-exitcode=1 --track-origins=yes"
+            -DMEMORYCHECK_COMMAND_OPTIONS="${VALGRIND_OPTIONS}"
 
       - name: Build (Memcheck)
         run: cmake --build build-memcheck --config RelWithDebInfo --parallel

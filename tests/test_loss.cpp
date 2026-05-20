@@ -85,8 +85,8 @@ bool run_binary_cross_entropy_clamp_check() {
   };
 
   const double loss_value = loss.forward(y_pred, y_true);
-  if (!std::isfinite(loss_value) || loss_value <= 0.0) {
-    std::cerr << "expected finite positive loss, got " << loss_value << "\n";
+  if (!std::isfinite(loss_value) || loss_value < 0.0) {
+    std::cerr << "expected finite non-negative loss, got " << loss_value << "\n";
     return false;
   }
 

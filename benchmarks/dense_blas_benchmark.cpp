@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include <random>
+#include <string>
 
 #include "dense.hpp"
 #include "matrix.hpp"
@@ -71,13 +72,32 @@ TimedResult run_naive_path(const mlp::Matrix &weights, const mlp::Vector &bias,
 
 }  // namespace
 
-int main() {
+int main(int argc, char **argv) {
   constexpr std::size_t kBatchSize = 512;
   constexpr std::size_t kInFeatures = 512;
   constexpr std::size_t kOutFeatures = 512;
   constexpr int kWarmupIterations = 3;
   constexpr int kIterations = 20;
   constexpr double kTolerance = 1e-5;
+  double min_speedup = 0.0;
+
+  for (int i = 1; i < argc; ++i) {
+    const std::string arg = argv[i];
+    if (arg == "--min-speedup") {
+      if (i + 1 >= argc) {
+        std::cerr << "--min-speedup requires a value\n";
+        return 1;
+      }
+      min_speedup = std::stod(argv[++i]);
+      continue;
+    }
+    if (arg == "--help") {
+      std::cout << "Usage: mlp_dense_benchmark [--min-speedup value]\n";
+      return 0;
+    }
+    std::cerr << "unknown argument: " << arg << "\n";
+    return 1;
+  }
 
   std::mt19937 rng(123);
   mlp::Dense dense(kInFeatures, kOutFeatures, rng);
@@ -139,5 +159,17 @@ int main() {
   std::cout << "naive_seconds=" << naive_result.seconds << "\n";
   std::cout << "speedup=" << speedup << "\n";
   std::cout << "sink=" << (dense_result.sink + naive_result.sink) << "\n";
+#ifdef MLP_USE_BLAS
+  if (min_speedup > 0.0 && speedup < min_speedup) {
+    std::cerr << "speedup check failed: expected at least " << min_speedup
+              << ", observed " << speedup << "\n";
+    return 1;
+  }
+#else
+  if (min_speedup > 0.0) {
+    std::cerr << "--min-speedup requires a BLAS-enabled build\n";
+    return 1;
+  }
+#endif
   return 0;
 }

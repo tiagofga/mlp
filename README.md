@@ -75,6 +75,7 @@ BLAS notes:
 - `MLP_ENABLE_BLAS=ON` enables configure-time detection of Apple Accelerate on macOS or a CBLAS-compatible BLAS library such as OpenBLAS on Linux.
 - If a compatible BLAS backend is not found, CMake emits a warning and the CPU path keeps using the existing fallback implementation.
 - `mlp_dense_benchmark` compares Dense forward/backward against the naive CPU path on a `512x512` workload and reports the observed speedup.
+- Use `./build-blas/mlp_dense_benchmark --min-speedup 2.0` on a BLAS-enabled build to assert the issue #4 acceptance threshold.
 
 ## Library Usage
 
@@ -186,9 +187,11 @@ Test suite includes:
 - training/evaluation integration test
 - save/load roundtrip test
 - installed package consumer test (`find_package(mlp)`)
+- BLAS benchmark gate (`mlp_dense_benchmark --min-speedup 2.0`) when a BLAS backend is enabled
 
 CI (`.github/workflows/ci.yml`) runs:
 - OpenMP matrix (`MLP_ENABLE_OPENMP=OFF/ON`)
+- BLAS configure/build/test/benchmark job with OpenBLAS on Ubuntu
 - optional CUDA configure/build smoke check when `nvcc` is available
 
 CI verification:

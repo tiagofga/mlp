@@ -21,6 +21,14 @@ Expected behavior:
 
 For OpenMP, CUDA, and BLAS build commands and notes, see [Backend Options](../README.md#backend-options) in the README.
 
+To validate the BLAS acceptance target from issue [#4](https://github.com/tiagofga/mlp/issues/4), run:
+
+```bash
+cmake -S . -B build-blas -DMLP_ENABLE_BLAS=ON
+cmake --build build-blas
+./build-blas/mlp_dense_benchmark --min-speedup 2.0
+```
+
 ## 4. How Training Works
 
 The default example is in `src/main.cpp`:
@@ -194,3 +202,4 @@ For install commands and `find_package` usage, see [Install and find_package](..
 ## 13. Automated Tests and CI
 
 For test commands and CI configuration details, see [Testing and CI](../README.md#testing-and-ci) in the README.
+That includes the BLAS benchmark gate whenever a BLAS backend is detected/enabled.

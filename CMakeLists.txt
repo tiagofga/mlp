@@ -204,6 +204,13 @@ endif()
 
 message(STATUS "MLP BLAS backend: ${MLP_BLAS_BACKEND}")
 
+if(BUILD_TESTING AND NOT MLP_BLAS_BACKEND STREQUAL "disabled")
+  add_test(
+    NAME mlp_test_dense_blas_benchmark
+    COMMAND mlp_dense_benchmark --min-speedup 2.0
+  )
+endif()
+
 if(MLP_ENABLE_CUDA)
   find_package(CUDAToolkit QUIET)
   if(NOT CUDAToolkit_FOUND)

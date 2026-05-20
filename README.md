@@ -139,10 +139,16 @@ cmake -S . -B build -DCMAKE_PREFIX_PATH=/tmp/mlp-install
 
 ## Documentation
 
-- `ROADMAP.md` — phased feature roadmap linked to GitHub issues
-- `docs/TUTORIAL.md`
-- `docs/EXPERIMENTS.md`
-- `docs/API_POLICY.md`
+- [`ROADMAP.md`](./ROADMAP.md) — phased feature roadmap linked to GitHub issues
+- [`docs/TUTORIAL.md`](./docs/TUTORIAL.md) — detailed how-to for running, extending, and contributing
+- [`docs/EXPERIMENTS.md`](./docs/EXPERIMENTS.md) — experiment log template for academic tracking
+- [`docs/API_POLICY.md`](./docs/API_POLICY.md) — API compatibility policy and versioning
+
+## Project Website (GitHub Pages)
+
+- URL: `https://tiagofga.github.io/mlp/`
+- Source files: [`docs/site`](./docs/site)
+- Deployment workflow: [`.github/workflows/pages.yml`](./.github/workflows/pages.yml)
 
 ## Optimizers Included
 
@@ -188,12 +194,6 @@ CI (`.github/workflows/ci.yml`) runs:
 CI verification:
 - use the `CI` badge at the top of this README
 - use `./scripts/pre_push_check.sh` before pushing changes
-
-## Scope
-
-- Language: C++17
-- Primary use case: academic experiments and library-oriented reuse
-- Supported acceleration paths: CPU, OpenMP, and optional CUDA
 
 ## License
 

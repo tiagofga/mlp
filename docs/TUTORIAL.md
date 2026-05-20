@@ -11,43 +11,7 @@ This guide shows how to run the current MLP, edit experiments, and contribute ne
 
 ## 2. Build and Run (CPU)
 
-From repository root:
-
-```bash
-cmake -S . -B build
-cmake --build build
-./build/mlp
-```
-
-Select optimizer at runtime:
-
-```bash
-./build/mlp --optimizer sgd
-./build/mlp --optimizer momentum
-./build/mlp --optimizer nag
-./build/mlp --optimizer adam
-./build/mlp --optimizer adamw
-./build/mlp --optimizer nadam
-./build/mlp --optimizer rmsprop
-./build/mlp --optimizer adagrad
-./build/mlp --optimizer adadelta
-./build/mlp --optimizer lion
-```
-
-Select hidden-layer layout at runtime:
-
-```bash
-./build/mlp --hidden 8
-./build/mlp --hidden 16,16
-./build/mlp --optimizer adam --hidden 32,16,8
-```
-
-Set training/split options at runtime:
-
-```bash
-./build/mlp --epochs 3000 --lr 0.01 --samples 1000
-./build/mlp --train-ratio 0.7 --val-ratio 0.15 --threshold 0.5
-```
+Build commands and all CLI flags are in [Quick Start](../README.md#quick-start-cli) and [Main Options](../README.md#main-options) in the README.
 
 Expected behavior:
 - You will see train and validation losses during training.
@@ -55,39 +19,7 @@ Expected behavior:
 
 ## 3. Optional Backends
 
-### 3.1 OpenMP (CPU parallel)
-
-```bash
-cmake -S . -B build-omp -DMLP_ENABLE_OPENMP=ON
-cmake --build build-omp
-./build-omp/mlp
-```
-
-### 3.2 CUDA (GPU for dense ops)
-
-```bash
-cmake -S . -B build-cuda -DMLP_ENABLE_CUDA=ON
-cmake --build build-cuda
-./build-cuda/mlp
-```
-
-If CUDA is not found, configure with:
-
-```bash
-cmake -S . -B build-cuda -DMLP_ENABLE_CUDA=ON -DCUDAToolkit_ROOT=/path/to/cuda
-```
-
-### 3.3 OpenMP + CUDA
-
-```bash
-cmake -S . -B build-hybrid -DMLP_ENABLE_OPENMP=ON -DMLP_ENABLE_CUDA=ON
-cmake --build build-hybrid
-./build-hybrid/mlp
-```
-
-Notes:
-- OpenMP affects CPU code paths.
-- CUDA path currently prioritizes modularity/correctness over peak performance.
+For OpenMP, CUDA, and BLAS build commands and notes, see [Backend Options](../README.md#backend-options) in the README.
 
 ## 4. How Training Works
 
@@ -172,36 +104,9 @@ To use your own dataset, replace the generator in `main.cpp` and keep:
 2. Implement update logic in `src/optimizer.cpp`.
 3. Use it in the training loop.
 
-### Available optimizers right now
+### Available optimizers
 
-| Name | CLI string | Notes |
-|---|---|---|
-| SGD | `sgd` | Vanilla stochastic gradient descent |
-| Momentum | `momentum` | SGD with exponential moving-average velocity |
-| NAG | `nag` | Nesterov Accelerated Gradient |
-| Adam | `adam` | Adaptive moment estimation |
-| AdamW | `adamw` | Adam + decoupled weight decay |
-| Nadam | `nadam` | Adam with Nesterov momentum correction |
-| RMSProp | `rmsprop` | Root mean square propagation |
-| AdaGrad | `adagrad` | Adaptive per-parameter learning rates (accumulative) |
-| AdaDelta | `adadelta` | AdaGrad variant with running averages, no fixed lr |
-| Lion | `lion` | Evolved Sign Momentum — sign-based, memory-efficient |
-| LambdaOptimizer | — | Custom extension hook via user-supplied lambdas |
-
-Runtime selection:
-
-```bash
-./build/mlp --optimizer sgd
-./build/mlp --optimizer momentum
-./build/mlp --optimizer nag
-./build/mlp --optimizer adam
-./build/mlp --optimizer adamw
-./build/mlp --optimizer nadam
-./build/mlp --optimizer rmsprop
-./build/mlp --optimizer adagrad
-./build/mlp --optimizer adadelta
-./build/mlp --optimizer lion
-```
+See [Optimizers Included](../README.md#optimizers-included) in the README for the full list and CLI strings.
 
 ### Custom optimizer without editing core code
 
@@ -284,57 +189,8 @@ Roundtrip example:
 
 ## 12. Install and Consume from Another Project
 
-Install package files:
-
-```bash
-cmake -S . -B build
-cmake --build build
-cmake --install build --prefix /tmp/mlp-install
-```
-
-Consumer `CMakeLists.txt`:
-
-```cmake
-find_package(mlp REQUIRED)
-target_link_libraries(your_app PRIVATE mlp::mlp_lib)
-```
-
-Component-based linking:
-
-```cmake
-find_package(mlp REQUIRED)
-target_link_libraries(your_app PRIVATE mlp::mlp_train mlp::mlp_io)
-```
-
-Read installed library version in code:
-
-```cpp
-#include "mlp/version.hpp"
-// MLP_VERSION_STRING, MLP_VERSION_MAJOR, MLP_VERSION_MINOR, MLP_VERSION_PATCH
-```
-
-Configure consumer:
-
-```bash
-cmake -S . -B build -DCMAKE_PREFIX_PATH=/tmp/mlp-install
-```
+For install commands and `find_package` usage, see [Install and find_package](../README.md#install-and-findpackage) in the README.
 
 ## 13. Automated Tests and CI
 
-Run tests locally:
-
-```bash
-cmake -S . -B build
-cmake --build build
-ctest --test-dir build --output-on-failure
-```
-
-Test coverage currently includes:
-- end-to-end training test
-- IO roundtrip (save/load) test
-- package consumer test using installed artifacts and `find_package(mlp)`
-
-CI workflow:
-- `.github/workflows/ci.yml`
-- runs matrix configure/build/test for `MLP_ENABLE_OPENMP=OFF/ON`
-- runs optional CUDA configure/build smoke check when `nvcc` is available on the runner
+For test commands and CI configuration details, see [Testing and CI](../README.md#testing-and-ci) in the README.

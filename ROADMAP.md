@@ -36,7 +36,7 @@ Extend the training loop with the most commonly needed building blocks.
 
 Speed up the CPU and GPU paths once the feature set is stable.
 
-- [ ] Replace naive matrix loops with BLAS/CBLAS — [#4](https://github.com/tiagofga/mlp/issues/4)
+- [ ] Replace naive matrix loops with BLAS/CBLAS — [#4](https://github.com/tiagofga/mlp/issues/4) *(BLAS/CBLAS code path implemented; benchmark ≥ 2× speedup target pending validation)*
 - [ ] Vectorise activation functions with SIMD intrinsics — [#5](https://github.com/tiagofga/mlp/issues/5)
 - [ ] Profile and reduce heap allocations in forward/backward pass — [#6](https://github.com/tiagofga/mlp/issues/6)
 - [ ] Add a memory pool for Matrix/Vector allocations — [#7](https://github.com/tiagofga/mlp/issues/7)

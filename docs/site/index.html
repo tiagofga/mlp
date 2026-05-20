@@ -11,52 +11,139 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main class="container">
-      <header class="hero">
-        <p class="kicker">tiagofga/mlp</p>
-        <h1>Modular MLP in C++</h1>
-        <p>
-          An academic-focused, from-scratch multilayer perceptron project in
-          modern C++ with both a CLI application and an installable CMake
-          library package.
-        </p>
-        <div class="actions">
-          <a class="btn btn-primary" href="https://github.com/tiagofga/mlp">View Repository</a>
-          <a class="btn" href="https://github.com/tiagofga/mlp/actions/workflows/ci.yml">CI Workflow</a>
-        </div>
-      </header>
-
-      <section>
-        <h2>Highlights</h2>
-        <ul>
-          <li>C++17 project focused on reproducible academic experiments.</li>
-          <li>CPU-first execution with optional OpenMP, BLAS/CBLAS, and CUDA paths.</li>
-          <li>BLAS path includes an automated 512x512 benchmark gate for issue #4.</li>
-          <li>Installable package with <code>find_package(mlp)</code> support.</li>
-          <li>Multiple optimizers, metrics, IO, and example applications.</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Quick Start</h2>
-        <pre><code>cmake -S . -B build
+    <div class="page-shell">
+      <main class="container">
+        <section class="hero panel">
+          <div class="hero-copy">
+            <p class="eyebrow">tiagofga/mlp</p>
+            <h1>Modern C++ for reproducible MLP experiments</h1>
+            <p class="hero-text">
+              Build, benchmark, and reuse a from-scratch multilayer perceptron with
+              a CLI workflow, installable CMake package, and optional accelerated
+              compute backends.
+            </p>
+            <div class="actions">
+              <a class="btn btn-primary" href="https://github.com/tiagofga/mlp">View Repository</a>
+              <a class="btn" href="https://github.com/tiagofga/mlp/actions/workflows/ci.yml">See CI Pipeline</a>
+            </div>
+            <div class="stats-grid" aria-label="Project overview">
+              <article class="stat-card">
+                <span class="stat-value">C++17</span>
+                <span class="stat-label">Core implementation</span>
+              </article>
+              <article class="stat-card">
+                <span class="stat-value">CPU + GPU</span>
+                <span class="stat-label">OpenMP, BLAS, CUDA options</span>
+              </article>
+              <article class="stat-card">
+                <span class="stat-value">Installable</span>
+                <span class="stat-label">CMake package with find_package</span>
+              </article>
+            </div>
+          </div>
+          <aside class="hero-panel">
+            <div class="terminal-card">
+              <p class="terminal-title">Quick start</p>
+              <pre><code>cmake -S . -B build
 cmake --build build
-./build/mlp</code></pre>
-        <pre><code>cmake -S . -B build-blas -DMLP_ENABLE_BLAS=ON
-cmake --build build-blas
-./build-blas/mlp_dense_benchmark --min-speedup 2.0</code></pre>
-      </section>
+./build/mlp
 
-      <section>
-        <h2>Documentation</h2>
-        <ul>
-          <li><a href="https://github.com/tiagofga/mlp/blob/master/README.md">README</a></li>
-          <li><a href="https://github.com/tiagofga/mlp/blob/master/ROADMAP.md">Roadmap</a></li>
-          <li><a href="https://github.com/tiagofga/mlp/blob/master/docs/TUTORIAL.md">Tutorial</a></li>
-          <li><a href="https://github.com/tiagofga/mlp/blob/master/docs/EXPERIMENTS.md">Experiments Log Template</a></li>
-          <li><a href="https://github.com/tiagofga/mlp/blob/master/docs/API_POLICY.md">API Compatibility Policy</a></li>
-        </ul>
-      </section>
-    </main>
+./scripts/pre_push_check.sh</code></pre>
+            </div>
+            <div class="info-card">
+              <p class="info-label">Built for</p>
+              <ul class="info-list">
+                <li>Academic experimentation</li>
+                <li>Reproducible training runs</li>
+                <li>Library reuse in larger CMake projects</li>
+              </ul>
+            </div>
+          </aside>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <p class="section-kicker">Why this project</p>
+            <h2>Focused features without framework overhead</h2>
+          </div>
+          <div class="feature-grid">
+            <article class="feature-card panel">
+              <h3>Training and evaluation</h3>
+              <p>
+                Run XOR-style experiments with configurable hidden layers,
+                optimizers, dataset splits, and metrics.
+              </p>
+            </article>
+            <article class="feature-card panel">
+              <h3>Acceleration paths</h3>
+              <p>
+                Start on CPU, enable OpenMP for parallelism, or switch on BLAS and
+                CUDA when you want faster dense operations.
+              </p>
+            </article>
+            <article class="feature-card panel">
+              <h3>Package-friendly design</h3>
+              <p>
+                Consume the project through exported CMake targets or stable public
+                headers in downstream applications.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block panel">
+          <div class="section-heading">
+            <p class="section-kicker">Build workflow</p>
+            <h2>Go from clone to validated run in minutes</h2>
+          </div>
+          <div class="workflow-grid">
+            <article class="workflow-step">
+              <span class="step-number">01</span>
+              <h3>Configure and build</h3>
+              <p>Generate the build directory with CMake and compile the CLI plus library targets.</p>
+            </article>
+            <article class="workflow-step">
+              <span class="step-number">02</span>
+              <h3>Run experiments</h3>
+              <p>Launch the executable locally to inspect training loss, validation behavior, and test metrics.</p>
+            </article>
+            <article class="workflow-step">
+              <span class="step-number">03</span>
+              <h3>Validate changes</h3>
+              <p>Use the pre-push script to rebuild and rerun the repository test suite before sharing updates.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading">
+            <p class="section-kicker">Docs and references</p>
+            <h2>Everything needed to explore, extend, and contribute</h2>
+          </div>
+          <div class="resource-grid">
+            <a class="resource-card panel" href="https://github.com/tiagofga/mlp/blob/master/README.md">
+              <span class="resource-tag">Start here</span>
+              <h3>README</h3>
+              <p>Project overview, build flags, usage options, and release links.</p>
+            </a>
+            <a class="resource-card panel" href="https://github.com/tiagofga/mlp/blob/master/docs/TUTORIAL.md">
+              <span class="resource-tag">Guide</span>
+              <h3>Tutorial</h3>
+              <p>Detailed walkthrough for running the CLI, extending features, and contributing safely.</p>
+            </a>
+            <a class="resource-card panel" href="https://github.com/tiagofga/mlp/blob/master/docs/EXPERIMENTS.md">
+              <span class="resource-tag">Research</span>
+              <h3>Experiments Log</h3>
+              <p>Keep academic tracking organized with a ready-to-use experiment template.</p>
+            </a>
+            <a class="resource-card panel" href="https://github.com/tiagofga/mlp/blob/master/ROADMAP.md">
+              <span class="resource-tag">Planning</span>
+              <h3>Roadmap</h3>
+              <p>Follow the phased feature plan tied to project milestones and issues.</p>
+            </a>
+          </div>
+        </section>
+      </main>
+    </div>
   </body>
 </html>

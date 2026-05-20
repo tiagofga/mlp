@@ -31,6 +31,7 @@
         <ul>
           <li>C++17 project focused on reproducible academic experiments.</li>
           <li>CPU-first execution with optional OpenMP, BLAS/CBLAS, and CUDA paths.</li>
+          <li>BLAS path includes an automated 512x512 benchmark gate for issue #4.</li>
           <li>Installable package with <code>find_package(mlp)</code> support.</li>
           <li>Multiple optimizers, metrics, IO, and example applications.</li>
         </ul>
@@ -41,6 +42,9 @@
         <pre><code>cmake -S . -B build
 cmake --build build
 ./build/mlp</code></pre>
+        <pre><code>cmake -S . -B build-blas -DMLP_ENABLE_BLAS=ON
+cmake --build build-blas
+./build-blas/mlp_dense_benchmark --min-speedup 2.0</code></pre>
       </section>
 
       <section>

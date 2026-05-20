@@ -28,6 +28,7 @@ Use this file as a standard format for academic experiment tracking. Copy the te
 - Compiler (`g++`/`clang++` + version):
 - CMake version:
 - Backend: `CPU` | `OpenMP` | `CUDA` | `OpenMP+CUDA`
+- BLAS backend: `disabled` | `CBLAS/OpenBLAS` | `Accelerate`
 - Build command:
 - Run command:
 - Hardware (CPU/GPU):
@@ -55,6 +56,7 @@ Use this file as a standard format for academic experiment tracking. Copy the te
 - Final test loss:
 - Metrics (accuracy/F1/etc.):
 - Runtime:
+- Benchmark speedup (if using `mlp_dense_benchmark`):
 - Notes on convergence:
 
 ### Analysis

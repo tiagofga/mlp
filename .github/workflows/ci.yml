@@ -4,6 +4,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     name: Build+Test (OpenMP=${{ matrix.openmp }})
@@ -25,6 +28,26 @@ jobs:
 
       - name: Test
         run: ctest --test-dir build --output-on-failure
+
+  blas-benchmark:
+    name: BLAS Benchmark
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install OpenBLAS
+        run: sudo apt-get update && sudo apt-get install -y libopenblas-dev
+
+      - name: Configure (BLAS)
+        run: cmake -S . -B build-blas -DCMAKE_BUILD_TYPE=Release -DMLP_ENABLE_BLAS=ON
+
+      - name: Build (BLAS)
+        run: cmake --build build-blas --config Release --parallel
+
+      - name: Test (BLAS)
+        run: ctest --test-dir build-blas --output-on-failure
 
   cuda-optional:
     name: CUDA Build (optional)

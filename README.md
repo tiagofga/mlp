@@ -186,6 +186,7 @@ Pre-push local check:
 Test suite includes:
 - activation-layer unit tests for ReLU, Sigmoid, and Tanh forward/backward behavior
 - loss-function unit tests for BinaryCrossEntropy forward/backward, clamp, and shape-mismatch behavior
+- finite-difference gradient checks via `tests/gradient_check.hpp`, including `mlp_test_gradient_check` coverage for Dense and Tanh layers
 - training/evaluation integration test
 - save/load roundtrip test
 - installed package consumer test (`find_package(mlp)`)

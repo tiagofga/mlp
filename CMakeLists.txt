@@ -38,6 +38,9 @@ add_executable(mlp_test_dense
 add_executable(mlp_test_activations
   tests/test_activations.cpp
 )
+add_executable(mlp_test_loss
+  tests/test_loss.cpp
+)
 add_executable(mlp_test_io_roundtrip
   tests/test_io_roundtrip.cpp
 )
@@ -116,6 +119,7 @@ target_link_libraries(mlp_io_example PRIVATE mlp_lib)
 target_link_libraries(mlp_test_experiment PRIVATE mlp::mlp_train)
 target_link_libraries(mlp_test_dense PRIVATE mlp::mlp_core)
 target_link_libraries(mlp_test_activations PRIVATE mlp::mlp_core)
+target_link_libraries(mlp_test_loss PRIVATE mlp::mlp_core)
 target_link_libraries(mlp_test_io_roundtrip PRIVATE mlp::mlp_io)
 target_link_libraries(mlp_dense_benchmark PRIVATE mlp::mlp_core)
 
@@ -129,6 +133,7 @@ target_compile_options(mlp_io_example PRIVATE -Wall -Wextra -Wpedantic)
 target_compile_options(mlp_test_experiment PRIVATE -Wall -Wextra -Wpedantic)
 target_compile_options(mlp_test_dense PRIVATE -Wall -Wextra -Wpedantic)
 target_compile_options(mlp_test_activations PRIVATE -Wall -Wextra -Wpedantic)
+target_compile_options(mlp_test_loss PRIVATE -Wall -Wextra -Wpedantic)
 target_compile_options(mlp_test_io_roundtrip PRIVATE -Wall -Wextra -Wpedantic)
 target_compile_options(mlp_dense_benchmark PRIVATE -Wall -Wextra -Wpedantic)
 
@@ -136,6 +141,7 @@ if(BUILD_TESTING)
   add_test(NAME mlp_test_experiment COMMAND mlp_test_experiment)
   add_test(NAME mlp_test_dense COMMAND mlp_test_dense)
   add_test(NAME mlp_test_activations COMMAND mlp_test_activations)
+  add_test(NAME mlp_test_loss COMMAND mlp_test_loss)
   add_test(NAME mlp_test_io_roundtrip COMMAND mlp_test_io_roundtrip)
   set_tests_properties(mlp_test_io_roundtrip PROPERTIES WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 

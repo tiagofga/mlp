@@ -105,7 +105,8 @@ To use your own dataset, replace the generator in `main.cpp` and keep:
 
 1. Add class in `include/loss.hpp` inheriting `Loss`.
 2. Implement `forward` and `backward` in `src/loss.cpp`.
-3. Replace `BinaryCrossEntropy` usage in `src/main.cpp`.
+3. Add or extend focused coverage in `tests/test_loss.cpp`.
+4. Replace `BinaryCrossEntropy` usage in `src/main.cpp`.
 
 ## 6.3 Add a new optimizer
 
@@ -204,4 +205,4 @@ For install commands and `find_package` usage, see [Install and find_package](..
 
 For test commands and CI configuration details, see [Testing and CI](../README.md#testing-and-ci) in the README.
 That includes the BLAS benchmark gate whenever a BLAS backend is detected/enabled.
-The local test suite also includes `mlp_test_activations` for ReLU, Sigmoid, and Tanh forward/backward checks.
+The local test suite also includes `mlp_test_activations` for ReLU, Sigmoid, and Tanh forward/backward checks, plus `mlp_test_loss` for BinaryCrossEntropy forward/backward, clamp, and shape-mismatch coverage.

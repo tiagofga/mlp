@@ -127,6 +127,32 @@ pre { margin: 0; padding: 1rem; overflow-x: auto; border-radius: 16px; backgroun
 .contribute-section p { color: var(--muted); max-width: 52rem; }
 .privacy-section p { color: var(--muted); max-width: 52rem; }
 
+
+.contribute-section,
+.privacy-section {
+  padding: 1.4rem 1.5rem;
+}
+
+.contribute-section h2,
+.privacy-section h2 {
+  text-wrap: balance;
+  line-height: 1.15;
+}
+
+.contribute-section p,
+.privacy-section p,
+.hero-text,
+.feature-card p,
+.workflow-step p,
+.resource-card p,
+.info-list {
+  line-height: 1.55;
+}
+
+.section-kicker {
+  margin-bottom: 0.4rem;
+}
+
 @media (max-width: 960px) {
   .hero,.feature-grid,.workflow-grid,.resource-grid,.visual-grid { grid-template-columns: 1fr; }
   .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -135,6 +161,8 @@ pre { margin: 0; padding: 1rem; overflow-x: auto; border-radius: 16px; backgroun
 @media (max-width: 640px) {
   .page-shell { padding: 1rem .75rem 2.5rem; }
   .hero { padding: 1.25rem; }
+  .contribute-section,
+  .privacy-section { padding: 1.1rem; }
   .stats-grid { grid-template-columns: 1fr; }
   h1 { font-size: 2.45rem; }
   .btn { width: 100%; }

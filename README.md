@@ -140,6 +140,7 @@ cmake -S . -B build -DCMAKE_PREFIX_PATH=/tmp/mlp-install
 
 ## Documentation
 
+- [`CONTRIBUTING.md`](./CONTRIBUTING.md) — contribution workflow, commit style, tests, and review checklist
 - [`ROADMAP.md`](./ROADMAP.md) — phased feature roadmap linked to GitHub issues
 - [`docs/TUTORIAL.md`](./docs/TUTORIAL.md) — detailed how-to for running, extending, and contributing
 - [`docs/EXPERIMENTS.md`](./docs/EXPERIMENTS.md) — experiment log template for academic tracking

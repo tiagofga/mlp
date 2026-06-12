@@ -27,7 +27,7 @@ Use this file as a standard format for academic experiment tracking. Copy the te
 - OS:
 - Compiler (`g++`/`clang++` + version):
 - CMake version:
-- Backend: `CPU` | `OpenMP` | `CUDA` | `OpenMP+CUDA`
+- Backend: `CPU` | `OpenMP` | `BLAS` | `CUDA` | `OpenMP+BLAS` | `OpenMP+CUDA`
 - BLAS backend: `disabled` | `CBLAS/OpenBLAS` | `Accelerate`
 - Build command:
 - Run command:
@@ -57,6 +57,8 @@ Use this file as a standard format for academic experiment tracking. Copy the te
 - Metrics (accuracy/F1/etc.):
 - Runtime:
 - Benchmark speedup (if using `mlp_dense_benchmark`):
+- Allocation profile (if working on issue #6):
+- Sanitizer/Valgrind result (if relevant):
 - Notes on convergence:
 
 ### Analysis

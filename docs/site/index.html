@@ -6,269 +6,300 @@
     <title>Modular MLP in C++</title>
     <meta
       name="description"
-      content="Academic-focused, from-scratch modular multilayer perceptron (MLP) in modern C++."
+      content="A from-scratch C++17 multilayer perceptron for reproducible experiments, CMake library reuse, and backend benchmarking."
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="page-shell">
-      <header class="topbar panel">
-        <p class="eyebrow">tiagofga/mlp</p>
-        <button class="theme-toggle" type="button" aria-label="Toggle theme" aria-pressed="false">
-          <span class="theme-icon" aria-hidden="true">🌙</span>
-          <span class="theme-label">Dark mode</span>
-        </button>
-      </header>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Modular MLP home">
+        <span class="brand-mark" aria-hidden="true">MLP</span>
+        <span class="brand-copy">
+          <span>Modular MLP</span>
+          <small>tiagofga/mlp</small>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="#features">Features</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#docs">Docs</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="false">
+        <span class="theme-glyph" aria-hidden="true"></span>
+      </button>
+    </header>
 
-      <main class="container">
-        <section class="hero panel">
-          <div class="hero-copy">
-            <h1>Modern C++ for reproducible MLP experiments</h1>
-            <p class="hero-text">
-              Build, benchmark, and reuse a from-scratch multilayer perceptron with
-              a CLI workflow, installable CMake package, and optional accelerated
-              compute backends. Built for students, educators, and engineers who
-              want transparent ML fundamentals without framework black boxes.
-            </p>
-            <div class="actions">
-              <a class="btn btn-primary" href="https://github.com/tiagofga/mlp">View Repository</a>
-              <a class="btn" href="https://github.com/tiagofga/mlp/actions/workflows/ci.yml">See CI Pipeline</a>
-            </div>
-            <section class="stats-section" aria-labelledby="project-overview-title">
-              <h2 id="project-overview-title" class="sr-only">Project overview</h2>
-              <div class="stats-grid">
-                <article class="stat-card">
-                  <span class="stat-value">C++17</span>
-                  <span class="stat-label">Core implementation</span>
-                </article>
-                <article class="stat-card">
-                  <span class="stat-value">CPU + GPU</span>
-                  <span class="stat-label">OpenMP, BLAS, CUDA options</span>
-                </article>
-                <article class="stat-card">
-                  <span class="stat-value">Installable</span>
-                  <span class="stat-label">CMake package with find_package</span>
-                </article>
-              </div>
-            </section>
+    <main id="top">
+      <section class="hero">
+        <canvas class="hero-canvas" aria-hidden="true"></canvas>
+        <div class="hero-shade" aria-hidden="true"></div>
+        <div class="hero-content">
+          <p class="eyebrow">C++17 neural network lab</p>
+          <h1>Transparent MLP experiments without framework black boxes</h1>
+          <p class="hero-text">
+            Build, test, benchmark, and reuse a from-scratch multilayer perceptron with a CLI workflow,
+            installable CMake targets, and optional OpenMP, BLAS, and CUDA backends.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="https://github.com/tiagofga/mlp">View repository</a>
+            <a class="button" href="https://github.com/tiagofga/mlp/actions/workflows/ci.yml">CI pipeline</a>
           </div>
-          <aside class="hero-panel">
-            <div class="terminal-card">
-              <p class="terminal-title">Quick start</p>
-              <pre><code>cmake -S . -B build
+        </div>
+      </section>
+
+      <section class="status-band" aria-label="Project status">
+        <article>
+          <strong>C++17</strong>
+          <span>Core implementation</span>
+        </article>
+        <article>
+          <strong>7 tests</strong>
+          <span>CTest baseline</span>
+        </article>
+        <article>
+          <strong>4 backends</strong>
+          <span>CPU, OpenMP, BLAS, CUDA</span>
+        </article>
+        <article>
+          <strong>CMake</strong>
+          <span>Installable package</span>
+        </article>
+      </section>
+
+      <section id="features" class="section">
+        <div class="section-copy">
+          <p class="eyebrow">What it gives you</p>
+          <h2>A compact lab for learning, benchmarking, and embedding MLPs</h2>
+          <p>
+            The code favors readable math, deterministic tests, and package-friendly boundaries. It is small
+            enough to inspect end to end, but structured enough to grow through issues and experiments.
+          </p>
+        </div>
+        <div class="feature-grid">
+          <article class="card feature-card">
+            <span class="card-index">01</span>
+            <h3>Experiment CLI</h3>
+            <p>Train XOR-style datasets with configurable hidden layers, optimizers, splits, seeds, and thresholds.</p>
+          </article>
+          <article class="card feature-card">
+            <span class="card-index">02</span>
+            <h3>Library API</h3>
+            <p>Consume stable `include/mlp/*` headers and exported CMake targets from downstream C++ projects.</p>
+          </article>
+          <article class="card feature-card">
+            <span class="card-index">03</span>
+            <h3>Verification-first</h3>
+            <p>Use unit tests, shared matrix assertions, finite-difference gradient checks, package tests, and CI checks.</p>
+          </article>
+          <article class="card feature-card">
+            <span class="card-index">04</span>
+            <h3>Backend switches</h3>
+            <p>Keep the scalar CPU path by default, then enable OpenMP, BLAS, or CUDA when the experiment calls for it.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="architecture" class="section split-section">
+        <div class="section-copy">
+          <p class="eyebrow">Architecture</p>
+          <h2>Small modules, clear data flow</h2>
+          <p>
+            `Sequential` owns layers, losses expose forward/backward contracts, and optimizers step through layer
+            parameter references. Recent cleanup centralizes optimizer traversal and shared test assertions.
+          </p>
+        </div>
+        <div class="architecture-flow" aria-label="MLP architecture flow">
+          <div class="flow-column">
+            <span>Input Matrix</span>
+            <span>Dense</span>
+            <span>Activation</span>
+          </div>
+          <div class="flow-arrow" aria-hidden="true"></div>
+          <div class="flow-column highlighted">
+            <span>Sequential</span>
+            <span>Loss</span>
+            <span>Backward Pass</span>
+          </div>
+          <div class="flow-arrow" aria-hidden="true"></div>
+          <div class="flow-column">
+            <span>Optimizer</span>
+            <span>Metrics</span>
+            <span>Report</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section command-section">
+        <div class="section-copy">
+          <p class="eyebrow">Local workflow</p>
+          <h2>Build, run, validate</h2>
+        </div>
+        <div class="command-grid">
+          <article class="terminal">
+            <header>
+              <span>Quick start</span>
+            </header>
+            <pre><code>cmake -S . -B build
 cmake --build build
 ./build/mlp
-
-./scripts/pre_push_check.sh</code></pre>
-              <p class="terminal-title terminal-title-secondary">BLAS benchmark</p>
-              <pre><code>cmake -S . -B build-blas -DMLP_ENABLE_BLAS=ON
+ctest --test-dir build --output-on-failure</code></pre>
+          </article>
+          <article class="terminal">
+            <header>
+              <span>BLAS benchmark</span>
+            </header>
+            <pre><code>cmake -S . -B build-blas -DMLP_ENABLE_BLAS=ON
 cmake --build build-blas
 ./build-blas/mlp_dense_benchmark --min-speedup 2.0</code></pre>
-            </div>
-            <div class="info-card">
-              <p class="info-label">Built for</p>
-              <ul class="info-list">
-                <li>Academic experimentation</li>
-                <li>Reproducible training runs</li>
-                <li>Activation, loss, and gradient-check coverage</li>
-                <li>Library reuse in larger CMake projects</li>
-              </ul>
-            </div>
-          </aside>
-        </section>
+          </article>
+        </div>
+      </section>
 
-        <section class="section-block">
-          <div class="section-heading">
-            <p class="section-kicker">Why this project</p>
-            <h2>Focused features without framework overhead</h2>
-            <p>
-              Motivation: make neural-network experimentation reproducible and inspectable in modern C++.
-              This project is a modular MLP implementation for people learning, teaching, benchmarking,
-              and integrating simple models into larger CMake-based systems.
-            </p>
-          </div>
-          <div class="feature-grid">
-            <article class="feature-card panel">
-              <h3>Training and evaluation</h3>
-              <p>
-                Run XOR-style experiments with configurable hidden layers,
-                optimizers, dataset splits, metrics, activation layers, and
-                loss functions (BinaryCrossEntropy) backed by dedicated unit
-                tests and finite-difference gradient checks.
-              </p>
-            </article>
-            <article class="feature-card panel">
-              <h3>Acceleration paths</h3>
-              <p>
-                Start on CPU, enable OpenMP for parallelism, or switch on BLAS and
-                CUDA when you want faster dense operations, including the 512x512
-                BLAS benchmark gate used in CI validation.
-              </p>
-            </article>
-            <article class="feature-card panel">
-              <h3>Package-friendly design</h3>
-              <p>
-                Consume the project through exported CMake targets or stable public
-                headers in downstream applications.
-              </p>
-            </article>
-          </div>
-        </section>
+      <section id="roadmap" class="section roadmap-section">
+        <div class="section-copy">
+          <p class="eyebrow">Roadmap</p>
+          <h2>Issue-driven development</h2>
+          <p>
+            The project roadmap is synced with GitHub Issues. Completed work covers BLAS acceleration,
+            activation/loss tests, gradient checks, and CI leak detection.
+          </p>
+        </div>
+        <div class="roadmap-grid">
+          <article class="roadmap-item done">
+            <span>Done</span>
+            <h3>Reliability baseline</h3>
+            <p>Unit tests, gradient checks, Valgrind CI, and BLAS benchmark coverage.</p>
+          </article>
+          <article class="roadmap-item">
+            <span>Next</span>
+            <h3>Training controls</h3>
+            <p>Mini-batches, early stopping, schedulers, clipping, checkpoints, and regularization.</p>
+          </article>
+          <article class="roadmap-item">
+            <span>Later</span>
+            <h3>Extensibility</h3>
+            <p>Softmax, LayerNorm, Conv2D, Python bindings, coverage reporting, and broader CI matrices.</p>
+          </article>
+        </div>
+      </section>
 
-        <section class="section-block panel">
-          <div class="section-heading">
-            <p class="section-kicker">Build workflow</p>
-            <h2>Go from clone to validated run in minutes</h2>
-          </div>
-          <div class="workflow-grid">
-            <article class="workflow-step">
-              <span class="step-number">01</span>
-              <h3>Configure and build</h3>
-              <p>Generate the build directory with CMake and compile the CLI plus library targets.</p>
-            </article>
-            <article class="workflow-step">
-              <span class="step-number">02</span>
-              <h3>Run experiments</h3>
-              <p>Launch the executable locally to inspect training loss, validation behavior, and test metrics.</p>
-            </article>
-            <article class="workflow-step">
-              <span class="step-number">03</span>
-              <h3>Validate changes</h3>
-              <p>Use the pre-push script to rebuild and rerun the repository test suite locally. CI enforces Valgrind leak checks and benchmark gates before changes land.</p>
-            </article>
-          </div>
-        </section>
+      <section id="docs" class="section docs-section">
+        <div class="section-copy">
+          <p class="eyebrow">Documentation</p>
+          <h2>Everything needed to explore and contribute</h2>
+        </div>
+        <div class="docs-grid">
+          <a class="card doc-card" href="https://github.com/tiagofga/mlp/blob/master/README.md">
+            <span>Start</span>
+            <h3>README</h3>
+            <p>Build commands, backend options, API entry points, and tests.</p>
+          </a>
+          <a class="card doc-card" href="https://github.com/tiagofga/mlp/blob/master/docs/TUTORIAL.md">
+            <span>Guide</span>
+            <h3>Tutorial</h3>
+            <p>Run experiments, add components, and follow the recommended workflow.</p>
+          </a>
+          <a class="card doc-card" href="https://github.com/tiagofga/mlp/blob/master/ROADMAP.md">
+            <span>Plan</span>
+            <h3>Roadmap</h3>
+            <p>Current GitHub issue state organized by project phase.</p>
+          </a>
+          <a class="card doc-card" href="https://github.com/tiagofga/mlp/blob/master/docs/API_POLICY.md">
+            <span>Policy</span>
+            <h3>API Policy</h3>
+            <p>Compatibility rules for public headers and exported targets.</p>
+          </a>
+        </div>
+      </section>
 
-
-        <section class="section-block visual-section panel">
-          <div class="section-heading">
-            <p class="section-kicker">Visual themes</p>
-            <h2>Light and dark previews</h2>
-            <p>Yes — the site can host additional custom images. These preview tiles are SVG-based and easy to replace.</p>
-          </div>
-          <div class="visual-grid">
-            <figure class="visual-card">
-              <svg viewBox="0 0 480 260" role="img" aria-label="Light theme preview" xmlns="http://www.w3.org/2000/svg">
-                <defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#dbeafe"/><stop offset="100%" stop-color="#eff6ff"/></linearGradient></defs>
-                <rect width="480" height="260" rx="22" fill="url(#lg1)"/>
-                <rect x="32" y="32" width="416" height="42" rx="12" fill="#ffffff"/>
-                <rect x="32" y="92" width="268" height="138" rx="16" fill="#ffffff"/>
-                <rect x="314" y="92" width="134" height="64" rx="16" fill="#bfdbfe"/>
-                <rect x="314" y="166" width="134" height="64" rx="16" fill="#dbeafe"/>
-              </svg>
-              <figcaption>Light mode composition</figcaption>
-            </figure>
-            <figure class="visual-card">
-              <svg viewBox="0 0 480 260" role="img" aria-label="Dark theme preview" xmlns="http://www.w3.org/2000/svg">
-                <defs><linearGradient id="dg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#111827"/></linearGradient></defs>
-                <rect width="480" height="260" rx="22" fill="url(#dg1)"/>
-                <rect x="32" y="32" width="416" height="42" rx="12" fill="#1e293b"/>
-                <rect x="32" y="92" width="268" height="138" rx="16" fill="#1e293b"/>
-                <rect x="314" y="92" width="134" height="64" rx="16" fill="#1d4ed8"/>
-                <rect x="314" y="166" width="134" height="64" rx="16" fill="#334155"/>
-              </svg>
-              <figcaption>Dark mode composition</figcaption>
-            </figure>
-          </div>
-        </section>
-
-
-        <section class="section-block panel contribute-section">
-          <div class="section-heading">
-            <p class="section-kicker">Contribute</p>
-            <h2>Help build the project with us</h2>
-            <p>
-              If this repository helped your research or learning, consider contributing:
-              report bugs, improve docs, add tests, or propose optimizations.
-              Every issue, discussion, and pull request makes the project stronger.
-            </p>
-          </div>
-          <div class="actions">
-            <a class="btn btn-primary" href="https://github.com/tiagofga/mlp/issues">Open an issue</a>
-            <a class="btn" href="https://github.com/tiagofga/mlp/pulls">Submit a pull request</a>
-            <a class="btn" href="https://github.com/tiagofga/mlp/issues/new/choose">Help via issues</a>
-          </div>
-        </section>
-
-        <section class="section-block panel privacy-section">
-          <div class="section-heading">
-            <p class="section-kicker">Privacy</p>
-            <h2>Theme preference only</h2>
-            <p>
-              This page stores only your theme choice (light/dark) in local storage so your preference persists between visits.
-              No analytics or advertising identifiers are set by this page.
-            </p>
-          </div>
-        </section>
-
-        <section class="section-block">
-          <div class="section-heading">
-            <p class="section-kicker">Docs and references</p>
-            <h2>Everything needed to explore, extend, and contribute</h2>
-            <p>
-              Start with the README, browse the full docs folder, and track planned milestones in the roadmap.
-            </p>
-          </div>
-          <div class="resource-grid">
-            <a class="resource-card panel" href="https://github.com/tiagofga/mlp/blob/master/README.md">
-              <span class="resource-tag">Start here</span>
-              <h3>README</h3>
-              <p>Project overview, build flags, usage options, and release links.</p>
-            </a>
-            <a class="resource-card panel" href="https://github.com/tiagofga/mlp/tree/master/docs">
-              <span class="resource-tag">Documentation</span>
-              <h3>Docs folder</h3>
-              <p>Browse tutorials, experiments, and policies in one place.</p>
-            </a>
-            <a class="resource-card panel" href="https://github.com/tiagofga/mlp/blob/master/docs/TUTORIAL.md">
-              <span class="resource-tag">Guide</span>
-              <h3>Tutorial</h3>
-              <p>Detailed walkthrough for running the CLI, extending features, and contributing safely.</p>
-            </a>
-            <a class="resource-card panel" href="https://github.com/tiagofga/mlp/blob/master/docs/EXPERIMENTS.md">
-              <span class="resource-tag">Research</span>
-              <h3>Experiments Log</h3>
-              <p>Keep academic tracking organized with a ready-to-use experiment template.</p>
-            </a>
-            <a class="resource-card panel" href="https://github.com/tiagofga/mlp/blob/master/ROADMAP.md">
-              <span class="resource-tag">Planning</span>
-              <h3>Roadmap</h3>
-              <p>Follow the phased feature plan tied to project milestones and issues.</p>
-            </a>
-            <a class="resource-card panel" href="https://github.com/tiagofga/mlp/blob/master/docs/API_POLICY.md">
-              <span class="resource-tag">Compatibility</span>
-              <h3>API Policy</h3>
-              <p>Review the compatibility expectations for public headers and exported targets.</p>
-            </a>
-          </div>
-        </section>
-      </main>
-    </div>
+      <section class="section contribute-section">
+        <div class="section-copy">
+          <p class="eyebrow">Contribute</p>
+          <h2>Pick a focused issue and make the project sharper</h2>
+          <p>
+            Good contributions include tests, docs, optimizer improvements, backend benchmarking,
+            package polish, and small refactors that keep the math easy to inspect.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="button primary" href="https://github.com/tiagofga/mlp/issues">Browse issues</a>
+          <a class="button" href="https://github.com/tiagofga/mlp/pulls">Open pull requests</a>
+        </div>
+      </section>
+    </main>
 
     <script>
       const root = document.documentElement;
       const toggle = document.querySelector('.theme-toggle');
-      const label = toggle?.querySelector('.theme-label');
-      const icon = toggle?.querySelector('.theme-icon');
       const storedTheme = window.localStorage.getItem('theme');
       const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const initialTheme = storedTheme || (systemDark ? 'dark' : 'light');
+      const canvas = document.querySelector('.hero-canvas');
+      const ctx = canvas?.getContext('2d');
+      const nodes = [
+        [0.16, 0.22], [0.16, 0.42], [0.16, 0.62], [0.16, 0.82],
+        [0.38, 0.18], [0.38, 0.36], [0.38, 0.54], [0.38, 0.72],
+        [0.62, 0.25], [0.62, 0.5], [0.62, 0.75],
+        [0.84, 0.38], [0.84, 0.62],
+      ];
 
       const applyTheme = (theme) => {
         root.setAttribute('data-theme', theme);
-        const dark = theme === 'dark';
-        if (toggle) {
-          toggle.setAttribute('aria-pressed', String(dark));
-        }
-        if (label) {
-          label.textContent = dark ? 'Light mode' : 'Dark mode';
-        }
-        if (icon) {
-          icon.textContent = dark ? '☀️' : '🌙';
-        }
+        toggle?.setAttribute('aria-pressed', String(theme === 'dark'));
       };
 
-      applyTheme(initialTheme);
+      const drawNetwork = (time = 0) => {
+        if (!canvas || !ctx) return;
+        const rect = canvas.getBoundingClientRect();
+        const scale = window.devicePixelRatio || 1;
+        if (canvas.width !== Math.floor(rect.width * scale) || canvas.height !== Math.floor(rect.height * scale)) {
+          canvas.width = Math.floor(rect.width * scale);
+          canvas.height = Math.floor(rect.height * scale);
+        }
+
+        const width = canvas.width;
+        const height = canvas.height;
+        const dark = root.getAttribute('data-theme') === 'dark';
+        ctx.clearRect(0, 0, width, height);
+        ctx.save();
+        ctx.scale(scale, scale);
+
+        const points = nodes.map(([x, y], index) => ({
+          x: x * rect.width,
+          y: y * rect.height + Math.sin(time / 900 + index) * 8,
+        }));
+
+        ctx.lineWidth = 1;
+        for (let i = 0; i < points.length; i += 1) {
+          for (let j = i + 1; j < points.length; j += 1) {
+            const closeColumns = Math.abs(nodes[i][0] - nodes[j][0]) < 0.27 && Math.abs(nodes[i][0] - nodes[j][0]) > 0.1;
+            if (!closeColumns) continue;
+            const pulse = (Math.sin(time / 650 + i * 0.7 + j * 0.2) + 1) / 2;
+            ctx.strokeStyle = dark ? `rgba(98, 224, 191, ${0.12 + pulse * 0.16})` : `rgba(20, 123, 112, ${0.12 + pulse * 0.14})`;
+            ctx.beginPath();
+            ctx.moveTo(points[i].x, points[i].y);
+            ctx.lineTo(points[j].x, points[j].y);
+            ctx.stroke();
+          }
+        }
+
+        points.forEach((point, index) => {
+          const pulse = (Math.sin(time / 500 + index) + 1) / 2;
+          ctx.fillStyle = dark ? 'rgba(12, 16, 22, 0.82)' : 'rgba(255, 255, 255, 0.82)';
+          ctx.strokeStyle = index % 3 === 0 ? '#f9735b' : '#2fb8a0';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.arc(point.x, point.y, 8 + pulse * 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+        });
+
+        ctx.restore();
+        window.requestAnimationFrame(drawNetwork);
+      };
+
+      applyTheme(storedTheme || (systemDark ? 'dark' : 'light'));
+      window.requestAnimationFrame(drawNetwork);
 
       toggle?.addEventListener('click', () => {
         const nextTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';

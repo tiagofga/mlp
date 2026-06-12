@@ -49,6 +49,7 @@ Core module map:
 - `include/model.hpp` + `src/model.cpp`: sequential container
 - `include/matrix.hpp`: CPU matrix operations
 - `include/cuda_ops.hpp` + `src/cuda_ops.cu`: CUDA backend operations
+- `tests/test_helpers.hpp`: shared matrix/vector assertions for tests
 
 ## 5. Edit the MLP for Your Experiment
 
@@ -112,7 +113,9 @@ To use your own dataset, replace the generator in `main.cpp` and keep:
 
 1. Add class in `include/optimizer.hpp`.
 2. Implement update logic in `src/optimizer.cpp`.
-3. Use it in the training loop.
+3. Reuse the existing parameter traversal and state helper patterns in `src/optimizer.cpp` instead of duplicating matrix/vector loops.
+4. Add or extend integration coverage in `tests/test_experiment.cpp` when the optimizer should be available through `run_xor_experiment`.
+5. Update README optimizer tables and CLI docs when a new optimizer gets a CLI string.
 
 ### Available optimizers
 
@@ -171,6 +174,8 @@ The full phased roadmap with links to GitHub issues is in [`ROADMAP.md`](../ROAD
 2. Build and run one baseline experiment.
 3. Validate loss behavior and outputs.
 4. Document any new module/API in `README.md` and this tutorial.
+5. Run `ctest --test-dir build --output-on-failure` before opening a pull request.
+6. If the change is roadmap-related, update `ROADMAP.md` and link the GitHub issue.
 
 ## 11. Programmatic Library Usage
 
@@ -207,3 +212,4 @@ For test commands and CI configuration details, see [Testing and CI](../README.m
 CI now also includes an Ubuntu Valgrind memcheck job that runs the test suite with full leak checks and fails on definite leaks.
 That includes the BLAS benchmark gate whenever a BLAS backend is detected/enabled.
 The local test suite also includes `mlp_test_activations` for ReLU, Sigmoid, and Tanh forward/backward checks, `mlp_test_loss` for BinaryCrossEntropy forward/backward, clamp, and shape-mismatch coverage, and `mlp_test_gradient_check` for reusable finite-difference checks on Dense and Tanh layers.
+Shared matrix/vector assertions live in `tests/test_helpers.hpp`; use them when adding new tests.

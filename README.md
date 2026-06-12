@@ -144,6 +144,25 @@ cmake -S . -B build -DCMAKE_PREFIX_PATH=/tmp/mlp-install
 - [`docs/TUTORIAL.md`](./docs/TUTORIAL.md) — detailed how-to for running, extending, and contributing
 - [`docs/EXPERIMENTS.md`](./docs/EXPERIMENTS.md) — experiment log template for academic tracking
 - [`docs/API_POLICY.md`](./docs/API_POLICY.md) — API compatibility policy and versioning
+- [`.codex/README.md`](./.codex/README.md) — local Codex project context and verification notes
+- [`.agents/README.md`](./.agents/README.md) — project agent-role notes for larger tasks
+
+## Project Structure
+
+Core source layout:
+
+- `include/mlp/` contains the stable public API for package consumers.
+- `include/` contains internal headers for layers, losses, optimizers, matrix utilities, and backends.
+- `src/` contains implementation files.
+- `tests/` contains focused test executables, finite-difference gradient checks, and shared test helpers.
+- `examples/` contains small library and I/O roundtrip examples.
+- `benchmarks/` contains dense backend performance checks.
+
+Recent code-health cleanup:
+
+- Optimizer parameter traversal and per-parameter state initialization are centralized in `src/optimizer.cpp`.
+- Matrix/vector test comparison helpers are centralized in `tests/test_helpers.hpp`.
+- Generated build directories such as `build/` and `build-*` are intentionally ignored.
 
 ## Project Website (GitHub Pages)
 
@@ -187,6 +206,7 @@ Test suite includes:
 - activation-layer unit tests for ReLU, Sigmoid, and Tanh forward/backward behavior
 - loss-function unit tests for BinaryCrossEntropy forward/backward, clamp, and shape-mismatch behavior
 - finite-difference gradient checks via `tests/gradient_check.hpp`, including `mlp_test_gradient_check` coverage for Dense and Tanh layers
+- shared matrix/vector test assertions via `tests/test_helpers.hpp`
 - training/evaluation integration test
 - save/load roundtrip test
 - installed package consumer test (`find_package(mlp)`)

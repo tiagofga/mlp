@@ -1,28 +1,9 @@
 #include <cmath>
-#include <iostream>
 
 #include "activations.hpp"
+#include "test_helpers.hpp"
 
 namespace {
-
-bool matrix_allclose(const mlp::Matrix &lhs, const mlp::Matrix &rhs, double tolerance) {
-  if (mlp::rows(lhs) != mlp::rows(rhs) || mlp::cols(lhs) != mlp::cols(rhs)) {
-    std::cerr << "matrix shape mismatch\n";
-    return false;
-  }
-
-  for (std::size_t i = 0; i < mlp::rows(lhs); ++i) {
-    for (std::size_t j = 0; j < mlp::cols(lhs); ++j) {
-      if (std::fabs(lhs[i][j] - rhs[i][j]) > tolerance) {
-        std::cerr << "matrix mismatch at (" << i << ", " << j << "): "
-                  << lhs[i][j] << " vs " << rhs[i][j] << "\n";
-        return false;
-      }
-    }
-  }
-
-  return true;
-}
 
 bool run_relu_check() {
   mlp::ReLU relu;
@@ -44,8 +25,8 @@ bool run_relu_check() {
       {-1.5, 0.0, 0.75},
   };
 
-  return matrix_allclose(relu.forward(input), expected_forward, 1e-12) &&
-         matrix_allclose(relu.backward(grad_output), expected_backward, 1e-12);
+  return test::matrix_allclose(relu.forward(input), expected_forward, 1e-12) &&
+         test::matrix_allclose(relu.backward(grad_output), expected_backward, 1e-12);
 }
 
 bool run_sigmoid_check() {
@@ -69,8 +50,8 @@ bool run_sigmoid_check() {
     }
   }
 
-  return matrix_allclose(sigmoid.forward(input), expected_forward, 1e-12) &&
-         matrix_allclose(sigmoid.backward(grad_output), expected_backward, 1e-12);
+  return test::matrix_allclose(sigmoid.forward(input), expected_forward, 1e-12) &&
+         test::matrix_allclose(sigmoid.backward(grad_output), expected_backward, 1e-12);
 }
 
 bool run_tanh_check() {
@@ -94,8 +75,8 @@ bool run_tanh_check() {
     }
   }
 
-  return matrix_allclose(tanh.forward(input), expected_forward, 1e-12) &&
-         matrix_allclose(tanh.backward(grad_output), expected_backward, 1e-12);
+  return test::matrix_allclose(tanh.forward(input), expected_forward, 1e-12) &&
+         test::matrix_allclose(tanh.backward(grad_output), expected_backward, 1e-12);
 }
 
 }  // namespace

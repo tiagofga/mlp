@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <stdexcept>
+#include <string>
 
 #include "matrix.hpp"
 
@@ -10,6 +11,10 @@ namespace mlp {
 namespace {
 
 void sgd_update(Matrix &param, const Matrix &grad, double lr) {
+  if (!std::isfinite(lr)) {
+    throw std::invalid_argument("SGD learning_rate must be finite");
+  }
+  check_same_shape(param, grad, "sgd_update");
   for (std::size_t i = 0; i < rows(param); ++i) {
     for (std::size_t j = 0; j < cols(param); ++j) {
       param[i][j] -= lr * grad[i][j];
@@ -18,12 +23,22 @@ void sgd_update(Matrix &param, const Matrix &grad, double lr) {
 }
 
 void sgd_update(Vector &param, const Vector &grad, double lr) {
+  if (!std::isfinite(lr)) {
+    throw std::invalid_argument("SGD learning_rate must be finite");
+  }
+  if (param.size() != grad.size()) {
+    throw std::invalid_argument("Shape mismatch in sgd_update vector");
+  }
   for (std::size_t i = 0; i < param.size(); ++i) {
     param[i] -= lr * grad[i];
   }
 }
 
 void apply_weight_decay(Matrix &param, double lr, double weight_decay) {
+  check_rectangular(param, "apply_weight_decay matrix");
+  if (!std::isfinite(lr) || !std::isfinite(weight_decay)) {
+    throw std::invalid_argument("Weight decay parameters must be finite");
+  }
   const double scale = 1.0 - lr * weight_decay;
   for (std::size_t i = 0; i < rows(param); ++i) {
     for (std::size_t j = 0; j < cols(param); ++j) {
@@ -33,9 +48,32 @@ void apply_weight_decay(Matrix &param, double lr, double weight_decay) {
 }
 
 void apply_weight_decay(Vector &param, double lr, double weight_decay) {
+  if (!std::isfinite(lr) || !std::isfinite(weight_decay)) {
+    throw std::invalid_argument("Weight decay parameters must be finite");
+  }
   const double scale = 1.0 - lr * weight_decay;
   for (double &v : param) {
     v *= scale;
+  }
+}
+
+void check_finite(double value, const char *name) {
+  if (!std::isfinite(value)) {
+    throw std::invalid_argument(std::string(name) + " must be finite");
+  }
+}
+
+void check_unit_interval(double value, const char *name) {
+  check_finite(value, name);
+  if (value < 0.0 || value >= 1.0) {
+    throw std::invalid_argument(std::string(name) + " must be in [0, 1)");
+  }
+}
+
+void check_positive(double value, const char *name) {
+  check_finite(value, name);
+  if (value <= 0.0) {
+    throw std::invalid_argument(std::string(name) + " must be positive");
   }
 }
 
@@ -53,6 +91,7 @@ void for_each_parameter(Sequential &model, MatrixRule matrix_rule, VectorRule ve
 }
 
 Matrix &state_for(std::unordered_map<const void *, Matrix> &states, Matrix &param) {
+  check_rectangular(param, "optimizer state matrix");
   auto &state = states[static_cast<const void *>(&param)];
   if (state.empty()) state = zeros_like(param);
   return state;
@@ -66,6 +105,10 @@ Vector &state_for(std::unordered_map<const void *, Vector> &states, Vector &para
 
 template <typename Rule>
 void update_matrix(MatrixParamRef param, Rule rule) {
+  if (param.value == nullptr || param.grad == nullptr) {
+    throw std::invalid_argument("MatrixParamRef contains null pointer");
+  }
+  check_same_shape(*param.value, *param.grad, "optimizer matrix parameter");
   for (std::size_t i = 0; i < rows(*param.value); ++i) {
     for (std::size_t j = 0; j < cols(*param.value); ++j) {
       rule((*param.value)[i][j], (*param.grad)[i][j], i, j);
@@ -75,6 +118,12 @@ void update_matrix(MatrixParamRef param, Rule rule) {
 
 template <typename Rule>
 void update_vector(VectorParamRef param, Rule rule) {
+  if (param.value == nullptr || param.grad == nullptr) {
+    throw std::invalid_argument("VectorParamRef contains null pointer");
+  }
+  if (param.value->size() != param.grad->size()) {
+    throw std::invalid_argument("Shape mismatch in optimizer vector parameter");
+  }
   for (std::size_t i = 0; i < param.value->size(); ++i) {
     rule((*param.value)[i], (*param.grad)[i], i);
   }
@@ -83,6 +132,7 @@ void update_vector(VectorParamRef param, Rule rule) {
 }  // namespace
 
 void SGD::step(Sequential &model) {
+  check_finite(learning_rate_, "SGD learning_rate");
   ++step_count_;
   for_each_parameter(
       model,
@@ -95,6 +145,8 @@ void SGD::step(Sequential &model) {
 }
 
 void Momentum::step(Sequential &model) {
+  check_finite(learning_rate_, "Momentum learning_rate");
+  check_unit_interval(beta_, "Momentum beta");
   ++step_count_;
   for_each_parameter(
       model,
@@ -115,6 +167,10 @@ void Momentum::step(Sequential &model) {
 }
 
 void Adam::step(Sequential &model) {
+  check_finite(learning_rate_, "Adam learning_rate");
+  check_unit_interval(beta1_, "Adam beta1");
+  check_unit_interval(beta2_, "Adam beta2");
+  check_positive(epsilon_, "Adam epsilon");
   ++step_count_;
   const double bias_c1 = 1.0 - std::pow(beta1_, static_cast<double>(step_count_));
   const double bias_c2 = 1.0 - std::pow(beta2_, static_cast<double>(step_count_));
@@ -148,6 +204,11 @@ void Adam::step(Sequential &model) {
 }
 
 void AdamW::step(Sequential &model) {
+  check_finite(learning_rate_, "AdamW learning_rate");
+  check_finite(weight_decay_, "AdamW weight_decay");
+  check_unit_interval(beta1_, "AdamW beta1");
+  check_unit_interval(beta2_, "AdamW beta2");
+  check_positive(epsilon_, "AdamW epsilon");
   ++step_count_;
   const double bias_c1 = 1.0 - std::pow(beta1_, static_cast<double>(step_count_));
   const double bias_c2 = 1.0 - std::pow(beta2_, static_cast<double>(step_count_));
@@ -183,6 +244,9 @@ void AdamW::step(Sequential &model) {
 }
 
 void RMSProp::step(Sequential &model) {
+  check_finite(learning_rate_, "RMSProp learning_rate");
+  check_unit_interval(rho_, "RMSProp rho");
+  check_positive(epsilon_, "RMSProp epsilon");
   ++step_count_;
   for_each_parameter(
       model,
@@ -203,6 +267,8 @@ void RMSProp::step(Sequential &model) {
 }
 
 void NAG::step(Sequential &model) {
+  check_finite(learning_rate_, "NAG learning_rate");
+  check_unit_interval(beta_, "NAG beta");
   ++step_count_;
   for_each_parameter(
       model,
@@ -223,6 +289,8 @@ void NAG::step(Sequential &model) {
 }
 
 void AdaGrad::step(Sequential &model) {
+  check_finite(learning_rate_, "AdaGrad learning_rate");
+  check_positive(epsilon_, "AdaGrad epsilon");
   ++step_count_;
   for_each_parameter(
       model,
@@ -243,6 +311,10 @@ void AdaGrad::step(Sequential &model) {
 }
 
 void Nadam::step(Sequential &model) {
+  check_finite(learning_rate_, "Nadam learning_rate");
+  check_unit_interval(beta1_, "Nadam beta1");
+  check_unit_interval(beta2_, "Nadam beta2");
+  check_positive(epsilon_, "Nadam epsilon");
   ++step_count_;
   const double bias_c1 = 1.0 - std::pow(beta1_, static_cast<double>(step_count_));
   const double bias_c2 = 1.0 - std::pow(beta2_, static_cast<double>(step_count_));
@@ -278,6 +350,8 @@ void Nadam::step(Sequential &model) {
 }
 
 void AdaDelta::step(Sequential &model) {
+  check_unit_interval(rho_, "AdaDelta rho");
+  check_positive(epsilon_, "AdaDelta epsilon");
   ++step_count_;
   for_each_parameter(
       model,
@@ -308,6 +382,9 @@ void AdaDelta::step(Sequential &model) {
 }
 
 void Lion::step(Sequential &model) {
+  check_finite(learning_rate_, "Lion learning_rate");
+  check_unit_interval(beta1_, "Lion beta1");
+  check_unit_interval(beta2_, "Lion beta2");
   ++step_count_;
   for_each_parameter(
       model,

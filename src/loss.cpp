@@ -8,8 +8,9 @@
 namespace mlp {
 
 double BinaryCrossEntropy::forward(const Matrix &y_pred, const Matrix &y_true) {
-  if (rows(y_pred) != rows(y_true) || cols(y_pred) != cols(y_true)) {
-    throw std::invalid_argument("BinaryCrossEntropy::forward shape mismatch");
+  check_same_shape(y_pred, y_true, "BinaryCrossEntropy::forward");
+  if (rows(y_pred) == 0 || cols(y_pred) == 0) {
+    throw std::invalid_argument("BinaryCrossEntropy::forward requires non-empty inputs");
   }
   y_pred_cache_ = clamp(y_pred, 1e-7, 1.0 - 1e-7);
   y_true_cache_ = y_true;
@@ -27,6 +28,9 @@ double BinaryCrossEntropy::forward(const Matrix &y_pred, const Matrix &y_true) {
 }
 
 Matrix BinaryCrossEntropy::backward() {
+  if (y_pred_cache_.empty()) {
+    throw std::logic_error("BinaryCrossEntropy::backward called before forward");
+  }
   const double n = static_cast<double>(rows(y_pred_cache_) * cols(y_pred_cache_));
   Matrix grad = make_matrix(rows(y_pred_cache_), cols(y_pred_cache_));
   for (std::size_t i = 0; i < rows(y_pred_cache_); ++i) {

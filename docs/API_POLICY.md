@@ -34,6 +34,8 @@ Component targets are public API as well:
 - `MINOR`: backward-compatible feature additions.
 - `MAJOR`: breaking changes are allowed.
 
+Validation and error behavior may become stricter in patch releases when the change prevents undefined behavior, unsafe memory access, malformed file loading, or silent numeric corruption. Consumers should treat documented exceptions from invalid inputs as part of normal error handling.
+
 ## Internal/Unstable API
 
 The following are currently internal implementation details and may change between minor versions:

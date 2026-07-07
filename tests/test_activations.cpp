@@ -1,4 +1,6 @@
 #include <cmath>
+#include <iostream>
+#include <stdexcept>
 
 #include "activations.hpp"
 #include "test_helpers.hpp"
@@ -79,6 +81,26 @@ bool run_tanh_check() {
          test::matrix_allclose(tanh.backward(grad_output), expected_backward, 1e-12);
 }
 
+bool run_activation_safety_checks() {
+  mlp::ReLU relu;
+  try {
+    (void)relu.backward({{1.0}});
+    std::cerr << "expected activation backward-before-forward exception\n";
+    return false;
+  } catch (const std::logic_error &) {
+  }
+
+  (void)relu.forward({{1.0, 2.0}});
+  try {
+    (void)relu.backward({{1.0}, {2.0}});
+    std::cerr << "expected activation backward shape exception\n";
+    return false;
+  } catch (const std::invalid_argument &) {
+  }
+
+  return true;
+}
+
 }  // namespace
 
 int main() {
@@ -86,5 +108,6 @@ int main() {
   ok = run_relu_check() && ok;
   ok = run_sigmoid_check() && ok;
   ok = run_tanh_check() && ok;
+  ok = run_activation_safety_checks() && ok;
   return ok ? 0 : 1;
 }

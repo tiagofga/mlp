@@ -90,6 +90,33 @@ bool run_binary_cross_entropy_clamp_check() {
   return true;
 }
 
+bool run_binary_cross_entropy_safety_checks() {
+  mlp::BinaryCrossEntropy loss;
+
+  try {
+    (void)loss.backward();
+    std::cerr << "expected loss backward-before-forward exception\n";
+    return false;
+  } catch (const std::logic_error &) {
+  }
+
+  try {
+    (void)loss.forward({}, {});
+    std::cerr << "expected empty loss input exception\n";
+    return false;
+  } catch (const std::invalid_argument &) {
+  }
+
+  try {
+    (void)loss.forward({{0.5}, {0.4, 0.6}}, {{1.0}, {0.0, 1.0}});
+    std::cerr << "expected non-rectangular loss input exception\n";
+    return false;
+  } catch (const std::invalid_argument &) {
+  }
+
+  return true;
+}
+
 }  // namespace
 
 int main() {
@@ -97,5 +124,6 @@ int main() {
   ok = run_binary_cross_entropy_forward_backward_check() && ok;
   ok = run_binary_cross_entropy_shape_mismatch_check() && ok;
   ok = run_binary_cross_entropy_clamp_check() && ok;
+  ok = run_binary_cross_entropy_safety_checks() && ok;
   return ok ? 0 : 1;
 }

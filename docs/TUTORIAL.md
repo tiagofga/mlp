@@ -157,12 +157,20 @@ Use `--threshold` to control classification cutoff for binary metrics.
 - Loss becomes `nan`:
   - Reduce learning rate.
   - Check for unstable operations (division/log domains).
+- `std::invalid_argument` from matrix or layer code:
+  - Check that every `Matrix` row has the same column count.
+  - Check that parameter and gradient shapes match before optimizer updates.
 - Loss does not decrease:
   - Verify backward equations.
   - Try smaller initialization or lower learning rate.
 - Shape mismatch exceptions:
   - Validate layer input/output sizes.
   - Validate dataset dimensions.
+- `std::logic_error` from `backward()`:
+  - Call `forward(...)` on the same layer/loss instance before calling `backward(...)`.
+- Checkpoint load failures:
+  - Verify the file starts with `MLPSEQv1`.
+  - Reject or regenerate files with non-finite values, extra trailing tokens, or unexpectedly large dimensions.
 
 ## 9. Contribution Roadmap
 
@@ -195,6 +203,7 @@ Example app:
 Model persistence API:
 - `include/mlp/io.hpp`
 - functions: `mlp::save_sequential(...)` and `mlp::load_sequential(...)`
+- loader behavior: validates checkpoint magic, layer count, dense shapes, finite numbers, and trailing data before returning a model
 
 Roundtrip example:
 - `examples/io_roundtrip.cpp`

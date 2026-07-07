@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <random>
+#include <stdexcept>
 
 #include "dense.hpp"
 #include "matrix.hpp"
@@ -57,11 +58,41 @@ bool run_dense_check(std::size_t batch_size, std::size_t in_features, std::size_
   return true;
 }
 
+bool run_dense_safety_checks() {
+  std::mt19937 rng(1234);
+
+  try {
+    mlp::Dense invalid(0, 1, rng);
+    (void)invalid;
+    std::cerr << "expected invalid Dense dimension exception\n";
+    return false;
+  } catch (const std::invalid_argument &) {
+  }
+
+  mlp::Dense dense(2, 1, rng);
+  try {
+    (void)dense.backward({{1.0}});
+    std::cerr << "expected backward-before-forward exception\n";
+    return false;
+  } catch (const std::logic_error &) {
+  }
+
+  try {
+    (void)dense.forward({{1.0, 2.0}, {3.0}});
+    std::cerr << "expected non-rectangular input exception\n";
+    return false;
+  } catch (const std::invalid_argument &) {
+  }
+
+  return true;
+}
+
 }  // namespace
 
 int main() {
   bool ok = true;
   ok = run_dense_check(4, 3, 5) && ok;
   ok = run_dense_check(7, 11, 6) && ok;
+  ok = run_dense_safety_checks() && ok;
   return ok ? 0 : 1;
 }

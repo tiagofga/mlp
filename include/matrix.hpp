@@ -2,8 +2,10 @@
 #define MATRIX_HPP
 
 #include <cstddef>
+#include <limits>
 #include <random>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 #include "mlp/types.hpp"
@@ -19,17 +21,39 @@ namespace mlp {
 inline std::size_t rows(const Matrix &m) { return m.size(); }
 inline std::size_t cols(const Matrix &m) { return m.empty() ? 0 : m[0].size(); }
 
+inline void check_allocation_size(std::size_t n_rows, std::size_t n_cols,
+                                  const char *context) {
+  if (n_rows != 0 && n_cols > std::numeric_limits<std::size_t>::max() / n_rows) {
+    throw std::length_error(std::string("Matrix size overflow in ") + context);
+  }
+}
+
+inline void check_rectangular(const Matrix &m, const char *context) {
+  if (m.empty()) return;
+  const std::size_t expected_cols = m[0].size();
+  for (std::size_t i = 1; i < m.size(); ++i) {
+    if (m[i].size() != expected_cols) {
+      throw std::invalid_argument(std::string("Non-rectangular matrix in ") + context);
+    }
+  }
+}
+
 inline Matrix make_matrix(std::size_t n_rows, std::size_t n_cols, double value = 0.0) {
+  check_allocation_size(n_rows, n_cols, "make_matrix");
   return Matrix(n_rows, Vector(n_cols, value));
 }
 
 inline void check_same_shape(const Matrix &a, const Matrix &b, const char *op) {
+  check_rectangular(a, op);
+  check_rectangular(b, op);
   if (rows(a) != rows(b) || cols(a) != cols(b)) {
     throw std::invalid_argument(std::string("Shape mismatch in ") + op);
   }
 }
 
 inline Matrix matmul(const Matrix &a, const Matrix &b) {
+  check_rectangular(a, "matmul lhs");
+  check_rectangular(b, "matmul rhs");
   if (cols(a) != rows(b)) {
     throw std::invalid_argument("Shape mismatch in matmul");
   }
@@ -47,6 +71,7 @@ inline Matrix matmul(const Matrix &a, const Matrix &b) {
 }
 
 inline Matrix transpose(const Matrix &m) {
+  check_rectangular(m, "transpose");
   Matrix out = make_matrix(cols(m), rows(m));
   MLP_OMP_PARALLEL_FOR
   for (std::size_t i = 0; i < rows(m); ++i) {
@@ -106,6 +131,7 @@ inline Matrix divide_elementwise(const Matrix &a, const Matrix &b, double eps = 
 }
 
 inline Matrix scalar_multiply(const Matrix &a, double scalar) {
+  check_rectangular(a, "scalar_multiply");
   Matrix out = make_matrix(rows(a), cols(a));
   MLP_OMP_PARALLEL_FOR
   for (std::size_t i = 0; i < rows(a); ++i) {
@@ -117,6 +143,7 @@ inline Matrix scalar_multiply(const Matrix &a, double scalar) {
 }
 
 inline Matrix scalar_add(const Matrix &a, double scalar) {
+  check_rectangular(a, "scalar_add");
   Matrix out = make_matrix(rows(a), cols(a));
   MLP_OMP_PARALLEL_FOR
   for (std::size_t i = 0; i < rows(a); ++i) {
@@ -128,6 +155,10 @@ inline Matrix scalar_add(const Matrix &a, double scalar) {
 }
 
 inline Matrix clamp(const Matrix &a, double lo, double hi) {
+  check_rectangular(a, "clamp");
+  if (lo > hi) {
+    throw std::invalid_argument("Invalid clamp bounds");
+  }
   Matrix out = make_matrix(rows(a), cols(a));
   MLP_OMP_PARALLEL_FOR
   for (std::size_t i = 0; i < rows(a); ++i) {
@@ -142,6 +173,7 @@ inline Matrix clamp(const Matrix &a, double lo, double hi) {
 }
 
 inline Matrix add_row_vector(const Matrix &a, const Vector &row_vec) {
+  check_rectangular(a, "add_row_vector");
   if (cols(a) != row_vec.size()) {
     throw std::invalid_argument("Shape mismatch in add_row_vector");
   }
@@ -156,6 +188,7 @@ inline Matrix add_row_vector(const Matrix &a, const Vector &row_vec) {
 }
 
 inline Vector mean_rows(const Matrix &a) {
+  check_rectangular(a, "mean_rows");
   Vector out(cols(a), 0.0);
   if (rows(a) == 0) return out;
   for (std::size_t i = 0; i < rows(a); ++i) {
@@ -170,6 +203,9 @@ inline Vector mean_rows(const Matrix &a) {
 
 inline Matrix random_matrix(std::size_t n_rows, std::size_t n_cols, double min_val, double max_val,
                             std::mt19937 &rng) {
+  if (min_val > max_val) {
+    throw std::invalid_argument("Invalid random_matrix bounds");
+  }
   std::uniform_real_distribution<double> dist(min_val, max_val);
   Matrix out = make_matrix(n_rows, n_cols);
   for (auto &row : out) {

@@ -1,8 +1,15 @@
 #include "model.hpp"
 
+#include <stdexcept>
+
 namespace mlp {
 
-void Sequential::add(std::unique_ptr<Layer> layer) { layers_.push_back(std::move(layer)); }
+void Sequential::add(std::unique_ptr<Layer> layer) {
+  if (!layer) {
+    throw std::invalid_argument("Sequential::add received null layer");
+  }
+  layers_.push_back(std::move(layer));
+}
 
 Matrix Sequential::forward(const Matrix &input) {
   Matrix out = input;

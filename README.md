@@ -91,6 +91,14 @@ Main API entry points:
 - `mlp::save_sequential(...)`
 - `mlp::load_sequential(...)`
 
+Safety and validation contracts:
+- Matrix helpers expect rectangular `Matrix` values and throw `std::invalid_argument` on ragged inputs or shape mismatches.
+- Matrix allocation helpers check `std::size_t` multiplication overflow before allocating.
+- `Dense`, activation layers, and `BinaryCrossEntropy` require `forward(...)` before `backward(...)` and throw `std::logic_error` when that lifecycle is violated.
+- Optimizers validate parameter/gradient references, matching shapes, and finite numeric hyperparameters before mutating weights.
+- Model checkpoint loading validates the file magic, layer count, dense dimensions, finite numeric values, and trailing data before returning a model.
+- Checkpoint loading is intended for trusted or reviewed model files; oversized or malformed files are rejected with exceptions.
+
 CMake targets:
 - `mlp::mlp_core`
 - `mlp::mlp_optim`
@@ -145,6 +153,7 @@ cmake -S . -B build -DCMAKE_PREFIX_PATH=/tmp/mlp-install
 - [`docs/TUTORIAL.md`](./docs/TUTORIAL.md) — detailed how-to for running, extending, and contributing
 - [`docs/EXPERIMENTS.md`](./docs/EXPERIMENTS.md) — experiment log template for academic tracking
 - [`docs/API_POLICY.md`](./docs/API_POLICY.md) — API compatibility policy and versioning
+- [`docs/site/index.html`](./docs/site/index.html) — GitHub Pages website source
 - [`.codex/README.md`](./.codex/README.md) — local Codex project context and verification notes
 - [`.agents/README.md`](./.agents/README.md) — project agent-role notes for larger tasks
 
@@ -206,6 +215,7 @@ Pre-push local check:
 Test suite includes:
 - activation-layer unit tests for ReLU, Sigmoid, and Tanh forward/backward behavior
 - loss-function unit tests for BinaryCrossEntropy forward/backward, clamp, and shape-mismatch behavior
+- safety regression tests for non-rectangular matrices, invalid layer lifecycle calls, and malformed checkpoint files
 - finite-difference gradient checks via `tests/gradient_check.hpp`, including `mlp_test_gradient_check` coverage for Dense and Tanh layers
 - shared matrix/vector test assertions via `tests/test_helpers.hpp`
 - training/evaluation integration test

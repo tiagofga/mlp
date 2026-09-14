@@ -1,6 +1,6 @@
 # Roadmap
 
-Last synced with GitHub Issues: 2026-06-12
+Last synced with GitHub Issues: 2026-09-14
 
 This roadmap tracks planned work for the Modular MLP project. Each item links to its GitHub issue, where acceptance criteria and discussion live.
 
@@ -9,7 +9,7 @@ Progress is tracked via [GitHub Issues](https://github.com/tiagofga/mlp/issues).
 Current issue state from GitHub:
 
 - Closed: [#4](https://github.com/tiagofga/mlp/issues/4), [#31](https://github.com/tiagofga/mlp/issues/31), [#32](https://github.com/tiagofga/mlp/issues/32), [#33](https://github.com/tiagofga/mlp/issues/33), [#34](https://github.com/tiagofga/mlp/issues/34)
-- Open: [#5](https://github.com/tiagofga/mlp/issues/5)-[#30](https://github.com/tiagofga/mlp/issues/30), [#35](https://github.com/tiagofga/mlp/issues/35)-[#38](https://github.com/tiagofga/mlp/issues/38)
+- Open: [#5](https://github.com/tiagofga/mlp/issues/5)-[#30](https://github.com/tiagofga/mlp/issues/30), [#35](https://github.com/tiagofga/mlp/issues/35)-[#38](https://github.com/tiagofga/mlp/issues/38)\n- Implemented but still open: [#27](https://github.com/tiagofga/mlp/issues/27)
 
 ---
 
@@ -88,7 +88,7 @@ Raise the quality bar for documentation and continuous integration.
 - [ ] Document CUDA path limitations and roadmap — [#29](https://github.com/tiagofga/mlp/issues/29)
 - [ ] Add benchmark comparison table for optimizers — [#30](https://github.com/tiagofga/mlp/issues/30)
 - [ ] Add Doxygen/API reference generation to CMake — [#26](https://github.com/tiagofga/mlp/issues/26)
-- [ ] Write contributing guide (`CONTRIBUTING.md`) — [#27](https://github.com/tiagofga/mlp/issues/27)
+- [x] Write contributing guide (`CONTRIBUTING.md`) — [#27](https://github.com/tiagofga/mlp/issues/27) *(Implemented; `CONTRIBUTING.md` covers branching strategy, Conventional Commits, local build/test instructions, and review checklists, and is linked from the README. The GitHub issue is still open and can be closed.)*
 - [ ] Add code coverage reporting with gcov/lcov — [#35](https://github.com/tiagofga/mlp/issues/35)
 - [ ] Add sanitizer builds: AddressSanitizer and UBSanitizer — [#36](https://github.com/tiagofga/mlp/issues/36)
 - [ ] Add Windows and macOS build matrices to CI — [#37](https://github.com/tiagofga/mlp/issues/37)

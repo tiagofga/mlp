@@ -191,8 +191,6 @@ cmake -S . -B build -DCMAKE_PREFIX_PATH=/tmp/mlp-install
 - [`docs/EXPERIMENTS.md`](./docs/EXPERIMENTS.md) — experiment log template for academic tracking
 - [`docs/API_POLICY.md`](./docs/API_POLICY.md) — API compatibility policy and versioning
 - [`docs/site/index.html`](./docs/site/index.html) — GitHub Pages website source
-- [`.codex/README.md`](./.codex/README.md) — local Codex project context and verification notes
-- [`.agents/README.md`](./.agents/README.md) — project agent-role notes for larger tasks
 
 ## Project Structure
 

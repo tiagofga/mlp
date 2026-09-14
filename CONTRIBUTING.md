@@ -30,6 +30,8 @@ Full local pre-push check:
 
 ## Branching Strategy
 
+`master` is the protected integration branch. Do not push changes directly to `master`. All changes must be developed on a dedicated branch and merged through a Pull Request after CI succeeds and the required review policy is satisfied.
+
 Use a short branch name that includes the type of work and, when possible, the GitHub issue number.
 
 Examples:
@@ -42,6 +44,8 @@ refactor/optimizer-config
 ```
 
 Keep each branch focused on one issue or one coherent change. If you discover unrelated cleanup while working, open a separate issue or branch for it.
+
+Recommended prefixes are `feat/`, `fix/`, `docs/`, `refactor/`, `perf/`, `test/`, `ci/`, and `chore/`. Pull Requests should target `master`; delete the working branch after merge when it is no longer needed.
 
 ## Commit Messages
 

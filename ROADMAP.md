@@ -84,7 +84,7 @@ Expand the layer and loss catalogue and improve cross-language usability.
 
 Raise the quality bar for documentation and continuous integration.
 
-- [ ] Add architecture diagram to README — [#28](https://github.com/tiagofga/mlp/issues/28)
+- [x] Add architecture diagram to README — [#28](https://github.com/tiagofga/mlp/issues/28) *(Implemented; README now includes an in-repository ASCII architecture diagram covering Dense, Activation, Loss, Optimizer, and forward/backward data flow.)*
 - [ ] Document CUDA path limitations and roadmap — [#29](https://github.com/tiagofga/mlp/issues/29)
 - [ ] Add benchmark comparison table for optimizers — [#30](https://github.com/tiagofga/mlp/issues/30)
 - [ ] Add Doxygen/API reference generation to CMake — [#26](https://github.com/tiagofga/mlp/issues/26)

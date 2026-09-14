@@ -1,13 +1,23 @@
 <!doctype html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Modular MLP in C++</title>
+    <title>Modular MLP in C++ — transparent neural-network engineering</title>
     <meta
       name="description"
-      content="A from-scratch C++17 multilayer perceptron for reproducible experiments, CMake library reuse, and backend benchmarking."
+      content="A from-scratch C++17 neural-network library for learning, experimentation, numerical validation, and systems-level ML engineering."
     />
+    <link rel="canonical" href="https://tiagofga.github.io/mlp/" />
+    <meta name="theme-color" content="#101115" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Modular MLP in C++" />
+    <meta property="og:description" content="A compact C++17 neural-network library with tests, gradient checks, CMake packaging, and optional OpenMP, BLAS, and CUDA backends." />
+    <meta property="og:url" content="https://tiagofga.github.io/mlp/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Modular MLP in C++" />
+    <meta name="twitter:description" content="Transparent neural-network engineering in modern C++." />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -19,15 +29,19 @@
           <small>tiagofga/mlp</small>
         </span>
       </a>
-      <nav class="site-nav" aria-label="Primary navigation">
-        <a href="#features">Features</a>
+      <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+        <a href="#capabilities">Capabilities</a>
         <a href="#architecture">Architecture</a>
+        <a href="#api">API</a>
         <a href="#roadmap">Roadmap</a>
         <a href="#docs">Docs</a>
       </nav>
-      <button class="theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="false">
-        <span class="theme-glyph" aria-hidden="true"></span>
-      </button>
+      <div class="header-actions">
+        <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="site-nav">☰</button>
+        <button class="theme-toggle" type="button" aria-label="Switch color theme" aria-pressed="true">
+          <span class="theme-glyph" aria-hidden="true"></span>
+        </button>
+      </div>
     </header>
 
     <main id="top">
@@ -35,11 +49,11 @@
         <canvas class="hero-canvas" aria-hidden="true"></canvas>
         <div class="hero-shade" aria-hidden="true"></div>
         <div class="hero-content">
-          <p class="eyebrow">C++17 neural network lab</p>
-          <h1>Transparent MLP experiments without framework black boxes</h1>
+          <p class="eyebrow">Modern C++ neural-network engineering</p>
+          <h1>Understand the math. Inspect the code. Benchmark the system.</h1>
           <p class="hero-text">
-            Build, test, benchmark, and reuse a from-scratch multilayer perceptron with a CLI workflow,
-            installable CMake targets, and optional OpenMP, BLAS, and CUDA backends.
+            A from-scratch C++17 neural-network library for learning, experimentation, numerical validation,
+            and systems-level ML engineering — with reusable CMake targets and optional OpenMP, BLAS, and CUDA backends.
           </p>
           <div class="hero-actions">
             <a class="button primary" href="https://github.com/tiagofga/mlp">View repository</a>
@@ -67,36 +81,22 @@
         </article>
       </section>
 
-      <section id="features" class="section">
+      <section id="capabilities" class="section">
         <div class="section-copy">
-          <p class="eyebrow">What it gives you</p>
-          <h2>A compact lab for learning, benchmarking, and embedding MLPs</h2>
+          <p class="eyebrow">Current capabilities</p>
+          <h2>Small enough to inspect, structured enough to extend</h2>
           <p>
-            The code favors readable math, deterministic tests, and package-friendly boundaries. It is small
-            enough to inspect end to end, but structured enough to grow through issues and experiments.
+            The project keeps neural-network mechanics explicit while still treating build, packaging, testing,
+            numerical validation, and backend selection as first-class engineering concerns.
           </p>
         </div>
-        <div class="feature-grid">
-          <article class="card feature-card">
-            <span class="card-index">01</span>
-            <h3>Experiment CLI</h3>
-            <p>Train XOR-style datasets with configurable hidden layers, optimizers, splits, seeds, and thresholds.</p>
-          </article>
-          <article class="card feature-card">
-            <span class="card-index">02</span>
-            <h3>Library API</h3>
-            <p>Consume stable `include/mlp/*` headers and exported CMake targets from downstream C++ projects.</p>
-          </article>
-          <article class="card feature-card">
-            <span class="card-index">03</span>
-            <h3>Verification-first</h3>
-            <p>Use unit tests, shared matrix assertions, finite-difference gradient checks, package tests, and CI checks.</p>
-          </article>
-          <article class="card feature-card">
-            <span class="card-index">04</span>
-            <h3>Backend switches</h3>
-            <p>Keep the scalar CPU path by default, then enable OpenMP, BLAS, or CUDA when the experiment calls for it.</p>
-          </article>
+        <div class="capability-table" role="table" aria-label="Current project capabilities">
+          <div class="capability-row" role="row"><strong role="cell">Layers</strong><span role="cell">Dense, ReLU, Sigmoid, Tanh</span></div>
+          <div class="capability-row" role="row"><strong role="cell">Loss</strong><span role="cell">Binary Cross-Entropy</span></div>
+          <div class="capability-row" role="row"><strong role="cell">Optimizers</strong><span role="cell">SGD, Momentum, NAG, Adam, AdamW, Nadam, RMSProp, AdaGrad, AdaDelta, Lion</span></div>
+          <div class="capability-row" role="row"><strong role="cell">Execution</strong><span role="cell">CPU, OpenMP, BLAS, experimental CUDA</span></div>
+          <div class="capability-row" role="row"><strong role="cell">Validation</strong><span role="cell">Unit tests, finite-difference gradient checks, Valgrind CI</span></div>
+          <div class="capability-row" role="row"><strong role="cell">Packaging</strong><span role="cell">CMake install, exported targets, <code>find_package(mlp)</code></span></div>
         </div>
       </section>
 
@@ -105,29 +105,49 @@
           <p class="eyebrow">Architecture</p>
           <h2>Small modules, clear data flow</h2>
           <p>
-            `Sequential` owns layers, losses expose forward/backward contracts, and optimizers step through layer
-            parameter references. Recent cleanup centralizes optimizer traversal and shared test assertions.
+            <code>Sequential</code> owns the layer stack. Forward propagation produces predictions, the loss starts
+            backpropagation, and optimizers update trainable parameters through explicit parameter/gradient references.
           </p>
         </div>
-        <div class="architecture-flow" aria-label="MLP architecture flow">
-          <div class="flow-column">
-            <span>Input Matrix</span>
-            <span>Dense</span>
-            <span>Activation</span>
+        <div class="architecture-flow architecture-v2" aria-label="Forward, loss, backward, and optimizer flow">
+          <div class="arch-line">
+            <span class="arch-node">Input</span><span class="arch-arrow">→</span>
+            <span class="arch-node">Dense</span><span class="arch-arrow">→</span>
+            <span class="arch-node">Activation</span><span class="arch-arrow">→</span>
+            <span class="arch-node">Dense</span><span class="arch-arrow">→</span>
+            <span class="arch-node">Prediction</span>
           </div>
-          <div class="flow-arrow" aria-hidden="true"></div>
-          <div class="flow-column highlighted">
-            <span>Sequential</span>
-            <span>Loss</span>
-            <span>Backward Pass</span>
+          <div class="arch-line secondary">
+            <span class="arch-node">Target</span><span class="arch-arrow">→</span>
+            <span class="arch-node accent-node">Loss</span><span class="arch-arrow">→</span>
+            <span class="arch-node">Backward gradients</span>
           </div>
-          <div class="flow-arrow" aria-hidden="true"></div>
-          <div class="flow-column">
-            <span>Optimizer</span>
-            <span>Metrics</span>
-            <span>Report</span>
+          <div class="arch-line secondary">
+            <span class="arch-node">Parameter refs</span><span class="arch-arrow">→</span>
+            <span class="arch-node accent-node">Optimizer</span><span class="arch-arrow">→</span>
+            <span class="arch-node">Updated weights</span>
           </div>
         </div>
+      </section>
+
+      <section id="api" class="section command-section">
+        <div class="section-copy">
+          <p class="eyebrow">C++ API</p>
+          <h2>Build a network with explicit components</h2>
+          <p>The public surface stays deliberately small while the training mechanics remain inspectable.</p>
+        </div>
+        <article class="terminal code-example">
+          <header><span>Minimal model</span></header>
+          <pre><code>std::mt19937 rng(42);
+
+mlp::Sequential model;
+model.add(std::make_unique&lt;mlp::Dense&gt;(2, 16, rng));
+model.add(std::make_unique&lt;mlp::Tanh&gt;());
+model.add(std::make_unique&lt;mlp::Dense&gt;(16, 1, rng));
+model.add(std::make_unique&lt;mlp::Sigmoid&gt;());
+
+mlp::Adam optimizer(0.01);</code></pre>
+        </article>
       </section>
 
       <section class="section command-section">
@@ -159,27 +179,26 @@ cmake --build build-blas
       <section id="roadmap" class="section roadmap-section">
         <div class="section-copy">
           <p class="eyebrow">Roadmap</p>
-          <h2>Issue-driven development</h2>
+          <h2>A focused path toward v1.0</h2>
           <p>
-            The project roadmap is synced with GitHub Issues. Completed work covers BLAS acceleration,
-            activation/loss tests, gradient checks, and CI leak detection.
+            The next milestones prioritize practical MLP training and multiclass support before broader framework scope.
           </p>
         </div>
         <div class="roadmap-grid">
           <article class="roadmap-item done">
-            <span>Done</span>
+            <span>Foundation</span>
             <h3>Reliability baseline</h3>
-            <p>Unit tests, gradient checks, Valgrind CI, and BLAS benchmark coverage.</p>
+            <p>Unit tests, gradient checks, Valgrind CI, BLAS acceleration, architecture docs, and reproducible builds.</p>
+          </article>
+          <article class="roadmap-item">
+            <span>Now</span>
+            <h3>Training foundations</h3>
+            <p><a href="https://github.com/tiagofga/mlp/issues/8">#8 mini-batches</a>, <a href="https://github.com/tiagofga/mlp/issues/55">#55 initialization</a>, and <a href="https://github.com/tiagofga/mlp/issues/18">#18 multiclass loss/activation</a>.</p>
           </article>
           <article class="roadmap-item">
             <span>Next</span>
-            <h3>Training controls</h3>
-            <p>Mini-batches, early stopping, schedulers, clipping, checkpoints, and regularization.</p>
-          </article>
-          <article class="roadmap-item">
-            <span>Later</span>
-            <h3>Extensibility</h3>
-            <p>Softmax, LayerNorm, Conv2D, Python bindings, coverage reporting, and broader CI matrices.</p>
+            <h3>Multiclass & validation</h3>
+            <p><a href="https://github.com/tiagofga/mlp/issues/59">#59 stable logits CE</a>, <a href="https://github.com/tiagofga/mlp/issues/56">#56 metrics</a>, and <a href="https://github.com/tiagofga/mlp/issues/57">#57 reference parity</a>.</p>
           </article>
         </div>
       </section>
@@ -233,7 +252,9 @@ cmake --build build-blas
       const root = document.documentElement;
       const toggle = document.querySelector('.theme-toggle');
       const storedTheme = window.localStorage.getItem('theme');
-      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const navToggle = document.querySelector('.nav-toggle');
+      const siteNav = document.querySelector('.site-nav');
       const canvas = document.querySelector('.hero-canvas');
       const ctx = canvas?.getContext('2d');
       const nodes = [
@@ -298,13 +319,29 @@ cmake --build build-blas
         window.requestAnimationFrame(drawNetwork);
       };
 
-      applyTheme(storedTheme || (systemDark ? 'dark' : 'light'));
-      window.requestAnimationFrame(drawNetwork);
+      applyTheme(storedTheme || 'dark');
+      if (!prefersReducedMotion) {
+        window.requestAnimationFrame(drawNetwork);
+      } else {
+        drawNetwork(0);
+      }
 
       toggle?.addEventListener('click', () => {
         const nextTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
         window.localStorage.setItem('theme', nextTheme);
         applyTheme(nextTheme);
+      });
+
+      navToggle?.addEventListener('click', () => {
+        const open = siteNav?.classList.toggle('open');
+        navToggle.setAttribute('aria-expanded', String(Boolean(open)));
+      });
+
+      siteNav?.querySelectorAll('a').forEach((link) => {
+        link.addEventListener('click', () => {
+          siteNav.classList.remove('open');
+          navToggle?.setAttribute('aria-expanded', 'false');
+        });
       });
     </script>
   </body>

@@ -8,8 +8,9 @@ Progress is tracked via [GitHub Issues](https://github.com/tiagofga/mlp/issues).
 
 Current issue state from GitHub:
 
-- Closed: [#4](https://github.com/tiagofga/mlp/issues/4), [#31](https://github.com/tiagofga/mlp/issues/31), [#32](https://github.com/tiagofga/mlp/issues/32), [#33](https://github.com/tiagofga/mlp/issues/33), [#34](https://github.com/tiagofga/mlp/issues/34)
-- Open: [#5](https://github.com/tiagofga/mlp/issues/5)-[#30](https://github.com/tiagofga/mlp/issues/30), [#35](https://github.com/tiagofga/mlp/issues/35)-[#38](https://github.com/tiagofga/mlp/issues/38)\n- Implemented but still open: [#27](https://github.com/tiagofga/mlp/issues/27)
+- Closed: [#4](https://github.com/tiagofga/mlp/issues/4), [#28](https://github.com/tiagofga/mlp/issues/28), [#30](https://github.com/tiagofga/mlp/issues/30), [#31](https://github.com/tiagofga/mlp/issues/31), [#32](https://github.com/tiagofga/mlp/issues/32), [#33](https://github.com/tiagofga/mlp/issues/33), [#34](https://github.com/tiagofga/mlp/issues/34)
+- Implemented but still open: [#27](https://github.com/tiagofga/mlp/issues/27)
+- New strategic gaps: [#55](https://github.com/tiagofga/mlp/issues/55)-[#59](https://github.com/tiagofga/mlp/issues/59)
 
 ---
 
@@ -26,13 +27,14 @@ Establish a solid test baseline before adding new features.
 
 ## Phase 2 — Core Training Features
 
-Extend the training loop with commonly needed training controls.
+Extend the training loop with commonly needed training controls. This phase is the highest-value path toward a practical v1.0 training API.
 
 - [ ] Implement mini-batch training support — [#8](https://github.com/tiagofga/mlp/issues/8)
+- [ ] Add configurable weight initialisation strategies — [#55](https://github.com/tiagofga/mlp/issues/55)
 - [ ] Add early stopping callback — [#14](https://github.com/tiagofga/mlp/issues/14)
-- [ ] Add learning-rate schedulers: step, cosine, exponential — [#13](https://github.com/tiagofga/mlp/issues/13)
-- [ ] Add gradient clipping by norm and by value — [#16](https://github.com/tiagofga/mlp/issues/16)
 - [ ] Add model checkpointing for best validation weights — [#17](https://github.com/tiagofga/mlp/issues/17)
+- [ ] Add gradient clipping by norm and by value — [#16](https://github.com/tiagofga/mlp/issues/16)
+- [ ] Add learning-rate schedulers: step, cosine, exponential — [#13](https://github.com/tiagofga/mlp/issues/13)
 - [ ] Add L1/L2 weight regularisation to Dense layer — [#15](https://github.com/tiagofga/mlp/issues/15)
 - [ ] Add dropout regularisation layer — [#11](https://github.com/tiagofga/mlp/issues/11)
 - [ ] Add batch-normalisation layer — [#10](https://github.com/tiagofga/mlp/issues/10)
@@ -69,20 +71,25 @@ Recent non-issue-backed cleanup:
 
 ---
 
-## Phase 5 — Advanced Features & Extensibility
+## Phase 5 — Multiclass & Extensibility
 
-Expand the layer and loss catalogue and improve cross-language usability.
+Move the project beyond binary XOR-style demonstrations and into general small-scale classification experiments.
 
 - [ ] Add softmax activation and cross-entropy loss for multi-class problems — [#18](https://github.com/tiagofga/mlp/issues/18)
+- [ ] Add numerically stable cross-entropy from logits — [#59](https://github.com/tiagofga/mlp/issues/59) *(depends on #18)*
+- [ ] Add multiclass evaluation metrics and confusion matrix — [#56](https://github.com/tiagofga/mlp/issues/56) *(depends on #18)*
 - [ ] Add Layer Normalisation — [#19](https://github.com/tiagofga/mlp/issues/19)
-- [ ] Add Conv2D layer — [#38](https://github.com/tiagofga/mlp/issues/38)
 - [ ] Expose Python bindings via pybind11 — [#12](https://github.com/tiagofga/mlp/issues/12)
+- [ ] Add Conv2D layer — [#38](https://github.com/tiagofga/mlp/issues/38)
 
 ---
 
-## Phase 6 — Documentation & CI
+## Phase 6 — Validation, Documentation & CI
 
-Raise the quality bar for documentation and continuous integration.
+Raise the quality bar for correctness evidence, documentation, portability, and continuous integration.
+
+- [ ] Add numerical parity checks against a reference implementation — [#57](https://github.com/tiagofga/mlp/issues/57)
+- [ ] Add end-to-end backend benchmark suite — [#58](https://github.com/tiagofga/mlp/issues/58)
 
 - [x] Add architecture diagram to README — [#28](https://github.com/tiagofga/mlp/issues/28) *(Implemented; README now includes an in-repository ASCII architecture diagram covering Dense, Activation, Loss, Optimizer, and forward/backward data flow.)*
 - [ ] Document CUDA path limitations and roadmap — [#29](https://github.com/tiagofga/mlp/issues/29)
@@ -95,8 +102,24 @@ Raise the quality bar for documentation and continuous integration.
 
 ---
 
+## Suggested v1.0 critical path
+
+A compact path to a substantially more capable release is:
+
+1. [#8](https://github.com/tiagofga/mlp/issues/8) mini-batch training.
+2. [#55](https://github.com/tiagofga/mlp/issues/55) weight initialisation.
+3. [#18](https://github.com/tiagofga/mlp/issues/18) Softmax + cross-entropy.
+4. [#59](https://github.com/tiagofga/mlp/issues/59) stable logits cross-entropy.
+5. [#56](https://github.com/tiagofga/mlp/issues/56) multiclass metrics.
+6. [#14](https://github.com/tiagofga/mlp/issues/14), [#17](https://github.com/tiagofga/mlp/issues/17), and [#16](https://github.com/tiagofga/mlp/issues/16) training controls.
+7. [#57](https://github.com/tiagofga/mlp/issues/57) reference parity validation.
+8. [#35](https://github.com/tiagofga/mlp/issues/35), [#36](https://github.com/tiagofga/mlp/issues/36), and [#37](https://github.com/tiagofga/mlp/issues/37) CI maturity.
+
+Conv2D and Python bindings remain valuable, but are not prerequisites for a coherent MLP-focused v1.0.
+
 ## Notes
 
 - Phases are roughly ordered by dependency, but individual items can be picked up out of order.
 - New ideas should be filed as GitHub Issues first and linked here once triaged.
 - Keep this file synced with GitHub issue state when issues are opened, closed, or renamed.
+- Prefer closing a smaller set of coherent v1.0 capabilities before expanding into broader framework scope.

@@ -91,6 +91,43 @@ Main API entry points:
 - `mlp::save_sequential(...)`
 - `mlp::load_sequential(...)`
 
+## Architecture
+
+The training path is intentionally small and explicit. `Sequential` owns the layer stack, the loss produces the initial output gradient, and the optimizer updates trainable parameters after backpropagation.
+
+```text
+                         FORWARD
+Input Matrix
+    |
+    v
++-----------+     +--------------+     +-----------+     +--------------+
+|   Dense   | --> |  Activation  | --> |   Dense   | --> |  Activation  |
++-----------+     +--------------+     +-----------+     +--------------+
+      ^                                       ^
+      | trainable parameters                  | trainable parameters
+      |                                       |
+      +---------------+   +-------------------+
+                      |   |
+                      v   v
+                 +-------------+
+                 |  Optimizer  |
+                 +-------------+
+                       ^
+                       | parameter + gradient references
+                       |
+Target Matrix --> +---------+
+                  |  Loss   |
+Prediction ------>|         |
+                  +---------+
+                       |
+                       | dLoss / dPrediction
+                       v
+                 BACKWARD through
+          Activation <- Dense <- Activation <- Dense
+```
+
+Forward propagation moves data through each `Dense` and `Activation` layer. The `Loss` compares predictions with targets and starts the backward pass. Each layer propagates gradients in reverse order, while the `Optimizer` consumes the parameter/gradient references exposed by trainable layers and applies the update step.
+
 Safety and validation contracts:
 - Matrix helpers expect rectangular `Matrix` values and throw `std::invalid_argument` on ragged inputs or shape mismatches.
 - Matrix allocation helpers check `std::size_t` multiplication overflow before allocating.
